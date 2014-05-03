@@ -38,10 +38,6 @@ public class Dot {
         return _ticks;
     }
 
-    public void setTicks(int ticks) {
-        _ticks = ticks;
-    }
-
     public void decreaseTicks() {
         _ticks--;
     }

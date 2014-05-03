@@ -8,9 +8,15 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import pt.up.fe.lpoo.fingerdot.FingerDotClass;
 
 public class IOSLauncher extends IOSApplication.Delegate {
-    @Override
-    protected IOSApplication createApplication() {
+    @Override protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+
+        config.orientationLandscape = true;
+        config.orientationPortrait = false;
+
+        config.useAccelerometer = false;
+        config.useCompass = false;
+
         return new IOSApplication(new FingerDotClass(), config);
     }
 
