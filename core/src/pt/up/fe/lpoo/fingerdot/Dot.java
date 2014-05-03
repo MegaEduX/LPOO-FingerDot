@@ -2,9 +2,10 @@ package pt.up.fe.lpoo.fingerdot;
 
 /**
  * FingerDot
- * <p/>
+ *
  * Created by MegaEduX on 02/05/14.
  */
+
 public class Dot {
     private int _x;
     private int _y;

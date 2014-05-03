@@ -2,33 +2,41 @@ package pt.up.fe.lpoo.fingerdot;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
 public class FingerDotClass extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-    Boolean showMore = false;
-    ArrayList<Dot> _dots = new ArrayList<Dot>();
-    int _cbCounter = 10;
+    ArrayList<Dot> _dots;
+
+    int _cbCounter = 60;
     boolean _isTouching = false;
 	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+	@Override public void create() {
+        _dots = new ArrayList<Dot>();
 	}
 
-	@Override
-	public void render () {
+	@Override public void render() {
+        BitmapFont font = new BitmapFont();
+
+        SpriteBatch sb = new SpriteBatch();
+
+        sb.begin();
+
+        font.setColor(1, 1, 1, 1);
+
+        font.draw(sb, "Score: XXXX", 200, 200);
+
+        sb.end();
+
         if (Gdx.input.isTouched() && !_isTouching) {
+            System.out.println("Touched Coordinates: " + Gdx.input.getX() + ", " + Gdx.input.getY());
             _isTouching = true;
             boolean correct = false;
 
@@ -37,7 +45,7 @@ public class FingerDotClass extends ApplicationAdapter {
             while (iter.hasNext()) {
                 Dot dot = iter.next();
 
-                if (dot.didTouch(Gdx.input.getX(), Gdx.input.getY())) {
+                if (dot.didTouch(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
                     correct = true;
 
                     System.out.println("Won " + dot.getScore() + " points!");
@@ -64,18 +72,21 @@ public class FingerDotClass extends ApplicationAdapter {
 
             dot.decreaseTicks();
 
-            if (dot.getTicks() <= 0)
+            if (dot.getTicks() <= 0) {
                 iter.remove();
+
+                System.out.println("Awww, lost a life...");
+            }
         }
 
         if (_cbCounter > 0)
             _cbCounter--;
         else {
-            Dot dot = new Dot(rd.nextInt(800), rd.nextInt(480), rd.nextInt(75) + 25);
+            Dot dot = new Dot(rd.nextInt(Gdx.graphics.getWidth()), rd.nextInt(Gdx.graphics.getHeight()), rd.nextInt(75) + 25);
 
             _dots.add(dot);
 
-            _cbCounter = 10;
+            _cbCounter = 60;
         }
 
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -88,9 +99,6 @@ public class FingerDotClass extends ApplicationAdapter {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         for (Dot aDot : _dots) {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
             shapeRenderer.setColor(1, 0, 0, (float)aDot.getTicks() / 100.0f);
 
             shapeRenderer.circle(aDot.getX(), aDot.getY(), aDot.getRadius());
