@@ -3,6 +3,7 @@ buildscript {
         mavenCentral()
         mavenLocal()
     }
+	
     dependencies {
         classpath 'com.android.tools.build:gradle:0.9+'
         classpath 'com.github.jtakakura:gradle-robovm-plugin:0.0.7'
@@ -48,16 +49,15 @@ project(":android") {
 project(":core") {
     apply plugin: "java"
 
-
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile files('lib/App42MultiPlayerGamingSDK-1.5.5.jar')
     }
 }
 
 project(":desktop") {
     apply plugin: "java"
-
 
     dependencies {
         compile project(":core")
