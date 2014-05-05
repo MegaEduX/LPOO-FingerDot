@@ -1,12 +1,13 @@
-package pt.up.fe.lpoo.fingerdot;
+package pt.up.fe.lpoo.fingerdot.singleplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
+import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
+import pt.up.fe.lpoo.fingerdot.logic.Dot;
 
 import java.util.Timer;
 import java.util.TimerTask;

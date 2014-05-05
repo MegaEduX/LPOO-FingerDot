@@ -9,7 +9,8 @@ package pt.up.fe.lpoo.fingerdot;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
+import pt.up.fe.lpoo.fingerdot.singleplayer.SinglePlayerScreen;
 
 public class MainMenuScreen implements Screen {
     final FingerDot _game;

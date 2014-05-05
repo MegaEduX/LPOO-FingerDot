@@ -1,8 +1,8 @@
-package pt.up.fe.lpoo.fingerdot;
+package pt.up.fe.lpoo.fingerdot.singleplayer;
 
-import com.badlogic.gdx.Gdx;
+import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.Dot;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;

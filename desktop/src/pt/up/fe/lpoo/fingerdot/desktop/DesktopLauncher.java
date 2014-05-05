@@ -2,7 +2,7 @@ package pt.up.fe.lpoo.fingerdot.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import pt.up.fe.lpoo.fingerdot.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

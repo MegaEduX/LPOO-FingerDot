@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import pt.up.fe.lpoo.fingerdot.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override

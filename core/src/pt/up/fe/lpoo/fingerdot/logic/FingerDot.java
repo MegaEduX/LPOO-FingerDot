@@ -1,10 +1,11 @@
-package pt.up.fe.lpoo.fingerdot;
+package pt.up.fe.lpoo.fingerdot.logic;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
 
 /**
  * FingerDot

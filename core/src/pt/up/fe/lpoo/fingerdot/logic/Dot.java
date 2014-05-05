@@ -1,4 +1,4 @@
-package pt.up.fe.lpoo.fingerdot;
+package pt.up.fe.lpoo.fingerdot.logic;
 
 /**
  * FingerDot
