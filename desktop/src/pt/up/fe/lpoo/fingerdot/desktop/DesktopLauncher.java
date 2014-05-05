@@ -2,7 +2,7 @@ package pt.up.fe.lpoo.fingerdot.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import pt.up.fe.lpoo.fingerdot.FingerDotClass;
+import pt.up.fe.lpoo.fingerdot.FingerDot;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -10,9 +10,9 @@ public class DesktopLauncher {
 
         config.title = "FingerDot";
 
-        config.width = 800;
-        config.height = 480;
+        config.width = 1280;
+        config.height = 720;
 
-		new LwjglApplication(new FingerDotClass(), config);
+		new LwjglApplication(new FingerDot(), config);
 	}
 }

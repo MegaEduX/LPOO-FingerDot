@@ -2,6 +2,7 @@ package pt.up.fe.lpoo.fingerdot;
 
 import com.badlogic.gdx.Gdx;
 
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -13,6 +14,8 @@ import java.util.Random;
  */
 
 public class GameController {
+    final FingerDot _game;
+
     static private int _baseAdvanceLevel = 10;
 
     private ArrayList<Dot> _dotsOnPlay;
@@ -33,11 +36,13 @@ public class GameController {
 
     private boolean _paused;
 
-    public GameController(int level, int lives) {
-        _lives = lives;
+    public GameController(final FingerDot game, int level, int lives) {
+        _game = game;
+        _lives = lives + 1;
         _level = level;
 
         _score = 0;
+        _tickCounter = 60;
 
         _leftToAdvanceLevel = _baseAdvanceLevel;
         _scoreMultiplier = 1.0f;
@@ -47,10 +52,13 @@ public class GameController {
     }
 
     public void performTick() {
+        if (_lives <= 0)
+            return;
+
         if (_tickCounter > 0)
             _tickCounter--;
         else {
-            Dot dot = new Dot(_rng.nextInt(Gdx.graphics.getWidth()), _rng.nextInt(Gdx.graphics.getHeight()), _rng.nextInt(75) + 25);
+            Dot dot = new Dot(_rng.nextInt((int) _game.camera.viewportWidth), _rng.nextInt((int) _game.camera.viewportHeight), _rng.nextInt(75) + 25);
 
             _dotsOnPlay.add(dot);
 
@@ -80,7 +88,7 @@ public class GameController {
         while (iter.hasNext()) {
             Dot dot = iter.next();
 
-            if (dot.didTouch(xCoordinate, Gdx.graphics.getHeight() - yCoordinate)) {
+            if (dot.didTouch(xCoordinate, (int) (_game.camera.viewportHeight - yCoordinate))) {
                 correct = true;
 
                 _score += (dot.getScore() * _scoreMultiplier);
