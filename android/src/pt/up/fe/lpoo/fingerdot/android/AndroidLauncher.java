@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import pt.up.fe.lpoo.fingerdot.FingerDotClass;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -16,6 +15,6 @@ public class AndroidLauncher extends AndroidApplication {
         config.useAccelerometer = false;
         config.useCompass = false;
 
-		initialize(new FingerDotClass(), config);
+		initialize(new FingerDot(), config);
 	}
 }

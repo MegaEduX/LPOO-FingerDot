@@ -16,20 +16,17 @@ import java.util.Random;
 public class GameController {
     final FingerDot _game;
 
-    static private int _baseAdvanceLevel = 10;
+    static private int _baseAdvanceLevel = 20;
+    static private int _baseTicks = 120;
 
     private ArrayList<Dot> _dotsOnPlay;
 
     private Random _rng;
 
     private int _lives;
-
     private int _score;
-
     private int _level;
-
     private int _tickCounter;
-
     private int _leftToAdvanceLevel;
 
     private float _scoreMultiplier;
@@ -42,7 +39,7 @@ public class GameController {
         _level = level;
 
         _score = 0;
-        _tickCounter = 60;
+        _tickCounter = _baseTicks;
 
         _leftToAdvanceLevel = _baseAdvanceLevel;
         _scoreMultiplier = 1.0f;
@@ -58,11 +55,11 @@ public class GameController {
         if (_tickCounter > 0)
             _tickCounter--;
         else {
-            Dot dot = new Dot(_rng.nextInt((int) _game.camera.viewportWidth), _rng.nextInt((int) _game.camera.viewportHeight), _rng.nextInt(75) + 25);
+            Dot dot = new Dot(_rng.nextInt((int) _game.camera.viewportWidth), _rng.nextInt((int) _game.camera.viewportHeight), _rng.nextInt(75) + (50 / _level + 10));
 
             _dotsOnPlay.add(dot);
 
-            _tickCounter = 60 / _level;
+            _tickCounter = _baseTicks / _level;
         }
 
         Iterator<Dot> iter = _dotsOnPlay.iterator();
