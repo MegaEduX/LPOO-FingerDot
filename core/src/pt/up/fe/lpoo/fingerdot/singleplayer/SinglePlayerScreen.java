@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
 import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.GameController;
 
 import java.util.Timer;
 import java.util.TimerTask;

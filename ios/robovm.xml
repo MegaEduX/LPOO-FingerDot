@@ -28,6 +28,7 @@
     <pattern>org.apache.harmony.security.provider.cert.X509CertFactoryImpl</pattern>
     <pattern>com.android.org.bouncycastle.jce.provider.PKIXCertPathValidatorSpi</pattern>
     <pattern>org.apache.harmony.xnet.provider.jsse.OpenSSLMessageDigestJDK$MD5</pattern>
+    <pattern>com.android.org.bouncycastle.jce.provider.JCEMac$SHA1</pattern>
   </forceLinkClasses>
   <libs>
     <lib>build/libs/ios/libgdx-freetype.a</lib>

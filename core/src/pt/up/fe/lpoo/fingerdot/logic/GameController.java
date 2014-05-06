@@ -1,4 +1,4 @@
-package pt.up.fe.lpoo.fingerdot.singleplayer;
+package pt.up.fe.lpoo.fingerdot.logic;
 
 import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.Dot;
@@ -14,24 +14,24 @@ import java.util.Random;
  */
 
 public class GameController {
-    final FingerDot _game;
+    protected final FingerDot _game;
 
-    static private int _baseAdvanceLevel = 20;
-    static private int _baseTicks = 120;
+    static protected int _baseAdvanceLevel = 20;
+    static protected int _baseTicks = 120;
 
-    private ArrayList<Dot> _dotsOnPlay;
+    protected ArrayList<Dot> _dotsOnPlay;
 
-    private Random _rng;
+    protected Random _rng;
 
-    private int _lives;
-    private int _score;
-    private int _level;
-    private int _tickCounter;
-    private int _leftToAdvanceLevel;
+    protected int _lives;
+    protected int _score;
+    protected int _level;
+    protected int _tickCounter;
+    protected int _leftToAdvanceLevel;
 
-    private float _scoreMultiplier;
+    protected float _scoreMultiplier;
 
-    private boolean _paused;
+    protected boolean _paused;
 
     public GameController(final FingerDot game, int level, int lives) {
         _game = game;
