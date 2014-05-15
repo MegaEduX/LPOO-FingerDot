@@ -32,6 +32,22 @@ public class MultiPlayerMessenger implements WarpListener {
         }
     }
 
+    public void onGameStarted(String message) {
+
+    }
+
+    public void onError(String message) {
+
+    }
+
+    public void onGameFinished(int code, boolean isRemote) {
+
+    }
+
+    public void onWaitingStarted(String message) {
+
+    }
+
     public void onGameUpdateReceived(String message) {
         try {
             JSONObject data = new JSONObject(message);
