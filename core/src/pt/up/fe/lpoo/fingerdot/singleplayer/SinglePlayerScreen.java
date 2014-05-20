@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
 import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
@@ -28,10 +29,14 @@ public class SinglePlayerScreen implements Screen {
 
     GameController _controller;
 
+    Texture _pausedTexture;
+
     public SinglePlayerScreen(final FingerDot game) {
         _game = game;
 
         _controller = new GameController(game, 1, 3);
+
+        _pausedTexture = new Texture(Gdx.files.internal("paused.png"));
     }
 
     @Override public void render(float delta) {
@@ -41,7 +46,16 @@ public class SinglePlayerScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (_paused) {
-            //  Do Something...
+            _game.batch.begin();
+            _game.batch.draw(_pausedTexture, 200, 50);
+            _game.batch.end();
+
+            if (!_isTouching)
+                if (Gdx.input.isTouched())
+                    _paused = false;
+
+            if (!Gdx.input.isTouched())
+                _isTouching = false;
 
             return;
         }
