@@ -6,9 +6,16 @@
 
 package pt.up.fe.lpoo.fingerdot.multiplayer;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import pt.up.fe.lpoo.fingerdot.logic.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.MPGameGenerator;
 import pt.up.fe.lpoo.fingerdot.multiplayer.appwarp.*;
 
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 public class MultiPlayerMessenger implements WarpListener {
     final MultiPlayerScreen _renderer;
@@ -33,7 +40,22 @@ public class MultiPlayerMessenger implements WarpListener {
     }
 
     public void onGameStarted(String message) {
+        if (WarpController.getInstance().isRoomOwner) {
+            ArrayList<Dot> game = MPGameGenerator.generateGameWithDots(100);
 
+            try {
+                Gson gs = new Gson();
+                JSONObject data = new JSONObject();
+
+                gs.toJson(game);
+                data.put("dots", data);
+
+                WarpController.getInstance().sendGameUpdate(data.toString());
+            } catch (Exception exc) {
+
+            }
+
+        }
     }
 
     public void onError(String message) {
@@ -52,14 +74,29 @@ public class MultiPlayerMessenger implements WarpListener {
         try {
             JSONObject data = new JSONObject(message);
 
-            float x = (float)data.getDouble("x");
-            float y = (float)data.getDouble("y");
-            float points = (float)data.getDouble("points");
-            boolean correct = (boolean)data.getBoolean("correct");
+            if (data.getString("dots") != null && data.getString("dots") != "") {
+                Gson gs = new Gson();
 
-            _renderer.renderEnemyTouch(x, y, correct);
+                Type listType = new TypeToken<ArrayList<Dot>>() {}.getType();
 
-            //  Points somewhere!
+                ArrayList<Dot> d = gs.fromJson(data.getString("dots"), listType);
+
+                _renderer.getController().setDots(d);
+            } else {
+                float x = (float)data.getDouble("x");
+                float y = (float)data.getDouble("y");
+                float points = (float)data.getDouble("points");
+                boolean correct = data.getBoolean("correct");
+
+                _renderer.renderEnemyTouch(x, y, correct);
+
+                if (correct)
+                    _renderer.getController().addOpponentScore((int) points);
+                else
+                    _renderer.getController().removeOpponentLife();
+
+                //  Points somewhere!
+            }
         } catch (Exception e) {
             // exception
         }

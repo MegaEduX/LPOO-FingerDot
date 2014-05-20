@@ -18,7 +18,14 @@ public class FingerDot extends Game {
     public BitmapFont font;
     public OrthographicCamera camera;
 
+    public static FingerDot sharedInstance;
+
     public void create() {
+        if (sharedInstance == null)
+            sharedInstance = this;
+        else
+            return;
+
         batch = new SpriteBatch();
         font = new BitmapFont();
         renderer = new ShapeRenderer();

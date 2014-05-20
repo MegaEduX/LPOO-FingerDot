@@ -43,6 +43,8 @@ public class WarpController {
 	public static final int GAME_WIN = 5;
 	public static final int GAME_LOOSE = 6;
 	public static final int ENEMY_LEFT = 7;
+
+    public boolean isRoomOwner = false;
 	
 	public WarpController() {
         try {
