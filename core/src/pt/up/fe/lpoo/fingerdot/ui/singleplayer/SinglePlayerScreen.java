@@ -1,18 +1,13 @@
-package pt.up.fe.lpoo.fingerdot.singleplayer;
+package pt.up.fe.lpoo.fingerdot.ui.singleplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
-import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
-import pt.up.fe.lpoo.fingerdot.logic.Dot;
-import pt.up.fe.lpoo.fingerdot.logic.GameController;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
 
 /**
  * FingerDot
@@ -21,20 +16,18 @@ import java.util.TimerTask;
  */
 
 public class SinglePlayerScreen implements Screen {
-    final FingerDot _game;
+    final FingerDot _game = FingerDot.sharedInstance;
 
     boolean _isTouching = false;
 
     boolean _paused = false;
 
-    GameController _controller;
+    SinglePlayerController _controller;
 
     Texture _pausedTexture;
 
-    public SinglePlayerScreen(final FingerDot game) {
-        _game = game;
-
-        _controller = new GameController(game, 1, 3);
+    public SinglePlayerScreen() {
+        _controller = new SinglePlayerController(1, 3);
 
         _pausedTexture = new Texture(Gdx.files.internal("paused.png"));
     }
@@ -51,8 +44,11 @@ public class SinglePlayerScreen implements Screen {
             _game.batch.end();
 
             if (!_isTouching)
-                if (Gdx.input.isTouched())
+                if (Gdx.input.isTouched()) {
                     _paused = false;
+
+                    _isTouching = true;
+                }
 
             if (!Gdx.input.isTouched())
                 _isTouching = false;
@@ -61,22 +57,9 @@ public class SinglePlayerScreen implements Screen {
         }
 
         if (_controller.getLives() <= 0) {
-            _game.renderer.begin(ShapeRenderer.ShapeType.Filled);
+            _game.setScreen(new SinglePlayerEndGameScreen());
 
-            _game.renderer.setColor(Color.BLUE);
-
-            _game.renderer.rect(200, 200, _game.camera.viewportWidth - 400, _game.camera.viewportHeight - 400);
-
-            _game.renderer.end();
-
-            if (Gdx.input.isTouched()) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        _game.setScreen(new MainMenuScreen(_game));
-                    }
-                }, 100);
-            }
+            dispose();
 
             return;
         }
@@ -149,7 +132,6 @@ public class SinglePlayerScreen implements Screen {
     }
 
     @Override public void dispose() {
-
+        _pausedTexture.dispose();
     }
-
 }

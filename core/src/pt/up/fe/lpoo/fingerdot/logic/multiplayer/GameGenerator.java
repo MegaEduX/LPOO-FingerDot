@@ -1,4 +1,7 @@
-package pt.up.fe.lpoo.fingerdot.logic;
+package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
+
+import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,7 +12,7 @@ import java.util.Random;
  * Created by MegaEduX on 16/05/14.
  */
 
-public class MPGameGenerator {
+public class GameGenerator {
     static protected int _baseAdvanceLevel = 20;
 
     static public ArrayList<Dot> generateGameWithDots(int dotsNumber) {

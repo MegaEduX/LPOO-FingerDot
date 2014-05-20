@@ -4,15 +4,15 @@
  * Created by MegaEduX on 03/05/14.
  */
 
-package pt.up.fe.lpoo.fingerdot;
+package pt.up.fe.lpoo.fingerdot.ui.misc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
-import pt.up.fe.lpoo.fingerdot.multiplayer.MultiPlayerScreen;
-import pt.up.fe.lpoo.fingerdot.singleplayer.SinglePlayerScreen;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
+import pt.up.fe.lpoo.fingerdot.ui.singleplayer.SinglePlayerScreen;
 
 public class MainMenuScreen implements Screen {
     private class RectangleBounds {
@@ -33,7 +33,7 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    final FingerDot _game;
+    final FingerDot _game = FingerDot.sharedInstance;
 
     Texture _menuTexture;
 
@@ -41,9 +41,7 @@ public class MainMenuScreen implements Screen {
     RectangleBounds _mpBounds;
     RectangleBounds _lbBounds;
 
-    public MainMenuScreen(final FingerDot game) {
-        _game = game;
-
+    public MainMenuScreen() {
         _menuTexture = new Texture(Gdx.files.internal("MAIN_MENU.png"));
 
         _spBounds = new RectangleBounds(450, 800, 230, 310);
@@ -68,19 +66,17 @@ public class MainMenuScreen implements Screen {
             y *= _game.camera.viewportHeight / Gdx.graphics.getHeight();
         }
 
-
-
         if (Gdx.input.isTouched()) {
             if (_spBounds.isInside(x, y)) {
-                _game.setScreen(new SinglePlayerScreen(_game));
+                _game.setScreen(new SinglePlayerScreen());
 
                 dispose();
             } else if (_mpBounds.isInside(x, y)) {
-                _game.setScreen(new MultiPlayerScreen(_game));
+                _game.setScreen(new MultiPlayerScreen());
 
                 dispose();
             } else if (_lbBounds.isInside(x, y)) {
-                /* _game.setScreen(new LeaderBoardScreen(_game));
+                /* _game.setScreen(new LeaderBoardScreen());
 
                 dispose();*/
             }

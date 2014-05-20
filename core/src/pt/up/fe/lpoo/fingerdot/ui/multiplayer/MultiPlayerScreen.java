@@ -1,4 +1,4 @@
-package pt.up.fe.lpoo.fingerdot.multiplayer;
+package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -6,11 +6,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
-import pt.up.fe.lpoo.fingerdot.MainMenuScreen;
-import pt.up.fe.lpoo.fingerdot.logic.Dot;
-import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
-import pt.up.fe.lpoo.fingerdot.logic.GameController;
-import pt.up.fe.lpoo.fingerdot.logic.MPGameController;
+import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
+import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerController;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,13 +19,13 @@ import java.util.TimerTask;
  */
 
 public class MultiPlayerScreen implements Screen {
-    final FingerDot _game;
+    final FingerDot _game = FingerDot.sharedInstance;
 
     boolean _isTouching = false;
 
     boolean _paused = false;
 
-    private MPGameController _controller;
+    private MultiPlayerController _controller;
 
     WarpClient _warpClient;
 
@@ -35,10 +34,8 @@ public class MultiPlayerScreen implements Screen {
     public static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     public static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
 
-    public MultiPlayerScreen(final FingerDot game) {
-        _game = game;
-
-        _controller = new MPGameController(game, 1, 3);
+    public MultiPlayerScreen() {
+        _controller = new MultiPlayerController(_game, 1, 3);
 
         try {
             WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
@@ -49,7 +46,7 @@ public class MultiPlayerScreen implements Screen {
         }
     }
 
-    public MPGameController getController() {
+    public MultiPlayerController getController() {
         return _controller;
     }
 
@@ -82,7 +79,7 @@ public class MultiPlayerScreen implements Screen {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        _game.setScreen(new MainMenuScreen(_game));
+                        _game.setScreen(new MainMenuScreen());
                     }
                 }, 100);
             }

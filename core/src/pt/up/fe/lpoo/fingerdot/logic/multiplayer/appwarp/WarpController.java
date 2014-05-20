@@ -1,15 +1,9 @@
-package pt.up.fe.lpoo.fingerdot.multiplayer.appwarp;
+package pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 
-import org.json.JSONObject;
-
-import com.badlogic.gdx.utils.Json;
-import com.shephertz.app42.gaming.multiplayer.client.Constants;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
-import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 
 public class WarpController {
@@ -61,7 +55,7 @@ public class WarpController {
 		warpClient.addNotificationListener(new NotificationListener(this));
 	}
 	
-	public static WarpController getInstance(){
+	public static WarpController getInstance() {
 		if (instance == null) {
 			instance = new WarpController();
 		}
@@ -69,7 +63,7 @@ public class WarpController {
 		return instance;
 	}
 	
-	public void startApp(String localUser){
+	public void startAppWarp(String localUser) {
 		this.localUser = localUser;
 		warpClient.connectWithUserName(localUser);
 	}
@@ -78,8 +72,7 @@ public class WarpController {
 		this.warpListener = listener;
 	}
 	
-	public void stopApp() {
-
+	public void startAppWarp() {
 		if (isConnected) {
 			warpClient.unsubscribeRoom(roomId);
 			warpClient.leaveRoom(roomId);
@@ -162,7 +155,7 @@ public class WarpController {
 	public void onGetLiveRoomInfo(String[] liveUsers){
 		log("onGetLiveRoomInfo: "+liveUsers.length);
 
-		if(liveUsers != null){
+		if (liveUsers != null) {
 			if(liveUsers.length == 2){
 				startGame();	
 			} else {
@@ -247,7 +240,7 @@ public class WarpController {
 			warpClient.unsubscribeRoom(roomId);
 			warpClient.leaveRoom(roomId);
 
-			if(STATE != STARTED){
+			if (STATE != STARTED){
 				warpClient.deleteRoom(roomId);
 			}
 
@@ -261,6 +254,7 @@ public class WarpController {
 		warpClient.removeZoneRequestListener(new ZoneListener(this));
 		warpClient.removeRoomRequestListener(new RoomListener(this));
 		warpClient.removeNotificationListener(new NotificationListener(this));
+
 		warpClient.disconnect();
 	}
 }

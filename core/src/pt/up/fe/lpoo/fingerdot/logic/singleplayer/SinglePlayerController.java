@@ -1,4 +1,7 @@
-package pt.up.fe.lpoo.fingerdot.logic;
+package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
+
+import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,8 +13,8 @@ import java.util.Random;
  * Created by MegaEduX on 02/05/14.
  */
 
-public class GameController {
-    protected final FingerDot _game;
+public class SinglePlayerController {
+    protected final FingerDot _game = FingerDot.sharedInstance;
 
     static protected int _baseAdvanceLevel = 20;
     static protected int _baseTicks = 120;
@@ -30,12 +33,11 @@ public class GameController {
 
     protected boolean _paused;
 
-    private GameController() {  //  This can't be executed anyway, just silencing something.
-        _game = null;
+    private SinglePlayerController() {  //  This can't be executed anyway, just silencing something.
+
     }
 
-    public GameController(final FingerDot game, int level, int lives) {
-        _game = game;
+    public SinglePlayerController(int level, int lives) {
         _lives = lives + 1;
         _level = level;
 

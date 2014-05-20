@@ -1,4 +1,4 @@
-package pt.up.fe.lpoo.fingerdot.logic;
+package pt.up.fe.lpoo.fingerdot.logic.common;
 
 /**
  * FingerDot
@@ -7,10 +7,14 @@ package pt.up.fe.lpoo.fingerdot.logic;
  */
 
 public class Dot {
-    private int _x;
-    private int _y;
-    private int _radius;
-    private int _ticks = 100;
+    protected int _x;
+    protected int _y;
+    protected int _radius;
+    protected int _ticks = 100;
+
+    public Dot() {
+
+    }
 
     public Dot(int x, int y, int radius) {
         _x = x;

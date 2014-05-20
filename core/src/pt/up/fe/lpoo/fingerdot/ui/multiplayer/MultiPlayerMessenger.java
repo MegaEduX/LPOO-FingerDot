@@ -4,13 +4,13 @@
  * Created by MegaEduX on 06/05/14.
  */
 
-package pt.up.fe.lpoo.fingerdot.multiplayer;
+package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import pt.up.fe.lpoo.fingerdot.logic.Dot;
-import pt.up.fe.lpoo.fingerdot.logic.MPGameGenerator;
-import pt.up.fe.lpoo.fingerdot.multiplayer.appwarp.*;
+import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.multiplayer.GameGenerator;
+import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.*;
 
 import org.json.JSONObject;
 
@@ -41,7 +41,7 @@ public class MultiPlayerMessenger implements WarpListener {
 
     public void onGameStarted(String message) {
         if (WarpController.getInstance().isRoomOwner) {
-            ArrayList<Dot> game = MPGameGenerator.generateGameWithDots(100);
+            ArrayList<Dot> game = GameGenerator.generateGameWithDots(100);
 
             try {
                 Gson gs = new Gson();

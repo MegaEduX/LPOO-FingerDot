@@ -1,4 +1,4 @@
-package pt.up.fe.lpoo.fingerdot.multiplayer.appwarp;
+package pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp;
 
 public interface WarpListener {
 	
