@@ -78,7 +78,7 @@ public class SinglePlayerScreen implements Screen {
             System.out.println("Real X: " + Gdx.input.getX() + ". Computed X: " + x);
             System.out.println("Real Y: " + Gdx.input.getY() + ". Computed Y: " + y);
 
-            if (x > _game.camera.viewportWidth - 75 && x < _game.camera.viewportWidth + 75 && y > 675)
+            if (y > 615 && x > 620 && x < 650)
                 pause();
             else
                 _controller.performTouch(x, y);

@@ -1,8 +1,5 @@
 package pt.up.fe.lpoo.fingerdot.logic;
 
-import pt.up.fe.lpoo.fingerdot.logic.FingerDot;
-import pt.up.fe.lpoo.fingerdot.logic.Dot;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -32,6 +29,10 @@ public class GameController {
     protected float _scoreMultiplier;
 
     protected boolean _paused;
+
+    private GameController() {  //  This can't be executed anyway, just silencing something.
+        _game = null;
+    }
 
     public GameController(final FingerDot game, int level, int lives) {
         _game = game;
