@@ -24,35 +24,24 @@ public class MultiPlayerScreen implements Screen {
 
     boolean _isTouching = false;
 
-    boolean _paused = false;
-
     private MultiPlayerController _controller;
 
-    WarpClient _warpClient;
-
-    private MultiPlayerMessenger _mpMessenger = new MultiPlayerMessenger(this);
-
-    public static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
-    public static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
+    private MultiPlayerMessenger _mpMessenger;
 
     public MultiPlayerScreen() {
         _controller = new MultiPlayerController(_game, 1, 3);
+    }
 
-        try {
-            WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
+    public MultiPlayerScreen(MultiPlayerMessenger msg) {
+        this();
 
-            _warpClient = WarpClient.getInstance();
-        } catch (Exception e) {
+        _mpMessenger = msg;
 
-        }
+        _mpMessenger.setMultiPlayerScreen(this);
     }
 
     public MultiPlayerController getController() {
         return _controller;
-    }
-
-    public void renderEnemyTouch(float x, float y, boolean correct) {
-
     }
 
     @Override public void render(float delta) {
@@ -60,12 +49,6 @@ public class MultiPlayerScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if (_paused) {
-            //  Do Something...
-
-            return;
-        }
 
         if (_controller.getLives() <= 0) {
             _game.renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -77,12 +60,7 @@ public class MultiPlayerScreen implements Screen {
             _game.renderer.end();
 
             if (Gdx.input.isTouched()) {
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        _game.setScreen(new MainMenuScreen());
-                    }
-                }, 100);
+                _game.setScreen(new MainMenuScreen());
             }
 
             return;
@@ -144,11 +122,11 @@ public class MultiPlayerScreen implements Screen {
     }
 
     @Override public void resume() {
-        _paused = false;
+
     }
 
     @Override public void pause() {
-        _paused = true;
+
     }
 
     @Override public void resize(int x, int y) {

@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 import pt.up.fe.lpoo.fingerdot.ui.singleplayer.SinglePlayerScreen;
 
@@ -41,6 +42,8 @@ public class MainMenuScreen implements Screen {
     RectangleBounds _mpBounds;
     RectangleBounds _lbBounds;
 
+    private int _ticksBeforeProcessingTouches = 30;
+
     public MainMenuScreen() {
         _menuTexture = new Texture(Gdx.files.internal("MAIN_MENU.png"));
 
@@ -59,6 +62,12 @@ public class MainMenuScreen implements Screen {
         _game.batch.draw(_menuTexture, 0, 0);
         _game.batch.end();
 
+        if (_ticksBeforeProcessingTouches > 0) {
+            _ticksBeforeProcessingTouches--;
+
+            return;
+        }
+
         int x = Gdx.input.getX(), y = Gdx.input.getY();
 
         if (!(_game.camera.viewportWidth == Gdx.graphics.getWidth() && _game.camera.viewportHeight == Gdx.graphics.getHeight())) {
@@ -72,7 +81,7 @@ public class MainMenuScreen implements Screen {
 
                 dispose();
             } else if (_mpBounds.isInside(x, y)) {
-                _game.setScreen(new MultiPlayerScreen());
+                _game.setScreen(new MultiPlayerMatchmakingScreen());
 
                 dispose();
             } else if (_lbBounds.isInside(x, y)) {

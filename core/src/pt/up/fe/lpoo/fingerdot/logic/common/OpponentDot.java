@@ -1,7 +1,5 @@
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
-import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
-
 /**
  * Created by MegaEduX on 20/05/14.
  */

@@ -8,33 +8,46 @@ package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
-import pt.up.fe.lpoo.fingerdot.logic.multiplayer.GameGenerator;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.*;
 
 import org.json.JSONObject;
+import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MultiPlayerMessenger implements WarpListener {
-    final MultiPlayerScreen _renderer;
+    private MultiPlayerScreen _mpScreen;
+    private MultiPlayerMatchmakingScreen _mpmScreen;
 
-    public MultiPlayerMessenger(MultiPlayerScreen renderer) {
-        _renderer = renderer;
-    }
+    private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
+    private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
 
     public void start() {
+        WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
 
+        WarpController.getInstance().setListener(this);
+
+        WarpController.getInstance().startAppWarp("username");
     }
 
     public void stop() {
 
     }
 
-    public void broadcastTouch(int x, int y, float points, int radius, boolean correct){
+    public void setMultiPlayerScreen(MultiPlayerScreen mps) {
+        _mpScreen = mps;
+    }
+
+    public void setMultiPlayerMatchmakingScreen(MultiPlayerMatchmakingScreen mpms) {
+        _mpmScreen = mpms;
+    }
+
+    public void broadcastTouch(int x, int y, float points, int radius, boolean correct) {
         try {
             JSONObject data = new JSONObject();
 
@@ -52,6 +65,8 @@ public class MultiPlayerMessenger implements WarpListener {
 
     public void onGameStarted(String message) {
         if (WarpController.getInstance().isRoomOwner) {
+            System.out.println("Generating Game...");
+
             ArrayList<Dot> game = GameGenerator.generateGameWithDots(100);
 
             try {
@@ -65,8 +80,9 @@ public class MultiPlayerMessenger implements WarpListener {
             } catch (Exception exc) {
 
             }
-
         }
+
+        _mpmScreen.startGame();
     }
 
     public void onError(String message) {
@@ -92,7 +108,7 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 ArrayList<Dot> d = gs.fromJson(data.getString("dots"), listType);
 
-                _renderer.getController().setDots(d);
+                _mpScreen.getController().setDots(d);
             } else {
                 int x = data.getInt("x");
                 int y = data.getInt("y");
@@ -101,14 +117,14 @@ public class MultiPlayerMessenger implements WarpListener {
                 float points = (float)data.getDouble("points");
                 boolean correct = data.getBoolean("correct");
 
-                _renderer.renderEnemyTouch(x, y, correct);
+                //  _mpScreen.renderEnemyTouch(x, y, correct);
 
-                _renderer.getController().addOpponentDot(new OpponentDot(x, y, radius, correct));
+                _mpScreen.getController().addOpponentDot(new OpponentDot(x, y, radius, correct));
 
                 if (correct)
-                    _renderer.getController().addOpponentScore((int) points);
+                    _mpScreen.getController().addOpponentScore((int) points);
                 else
-                    _renderer.getController().removeOpponentLife();
+                    _mpScreen.getController().removeOpponentLife();
 
                 //  Points somewhere!
             }
@@ -116,7 +132,4 @@ public class MultiPlayerMessenger implements WarpListener {
             // exception
         }
     }
-
-
-
 }

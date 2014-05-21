@@ -117,7 +117,7 @@ public class WarpController {
 	}
 	
 	public void onRoomCreated(String roomId){
-		if (roomId!=null) {
+		if (roomId != null) {
 			warpClient.joinRoom(roomId);
 		} else {
 			handleError();
@@ -133,7 +133,7 @@ public class WarpController {
 		} else if (event.getResult()==WarpResponseResultCode.RESOURCE_NOT_FOUND) {// no such room found
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("result", "");
-			warpClient.createRoom("superjumper", "shephertz", 2, data);
+			warpClient.createRoom("gametest", localUser, 2, data);
 		} else {
 			warpClient.disconnect();
 			handleError();
@@ -156,7 +156,7 @@ public class WarpController {
 		log("onGetLiveRoomInfo: "+liveUsers.length);
 
 		if (liveUsers != null) {
-			if(liveUsers.length == 2){
+			if (liveUsers.length == 2){
 				startGame();	
 			} else {
 				waitForOtherUser();
@@ -217,7 +217,7 @@ public class WarpController {
 		}
 	}
 	
-	private void startGame(){
+	private void startGame() {
 		STATE = STARTED;
 		warpListener.onGameStarted("Start the Game");
 	}

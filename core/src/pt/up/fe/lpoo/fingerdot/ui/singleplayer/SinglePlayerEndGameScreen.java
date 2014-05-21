@@ -33,14 +33,7 @@ public class SinglePlayerEndGameScreen implements Screen {
         }
 
         if (Gdx.input.isTouched()) {
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    _game.setScreen(new MainMenuScreen());
-
-                    dispose();
-                }
-            }, 100);
+            _game.setScreen(new MainMenuScreen());
         }
     }
 
