@@ -4,15 +4,17 @@
  * Created by MegaEduX on 06/05/14.
  */
 
-package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
+package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.GameGenerator;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.*;
 
 import org.json.JSONObject;
+import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -24,13 +26,22 @@ public class MultiPlayerMessenger implements WarpListener {
         _renderer = renderer;
     }
 
-    private void broadcastTouch(float x, float y, float points, boolean correct){
+    public void start() {
+
+    }
+
+    public void stop() {
+
+    }
+
+    public void broadcastTouch(int x, int y, float points, int radius, boolean correct){
         try {
             JSONObject data = new JSONObject();
 
             data.put("x", x);
             data.put("y", y);
             data.put("points", points);
+            data.put("radius", radius);
             data.put("correct", correct);
 
             WarpController.getInstance().sendGameUpdate(data.toString());
@@ -83,12 +94,16 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 _renderer.getController().setDots(d);
             } else {
-                float x = (float)data.getDouble("x");
-                float y = (float)data.getDouble("y");
+                int x = data.getInt("x");
+                int y = data.getInt("y");
+                int radius = data.getInt("radius");
+
                 float points = (float)data.getDouble("points");
                 boolean correct = data.getBoolean("correct");
 
                 _renderer.renderEnemyTouch(x, y, correct);
+
+                _renderer.getController().addOpponentDot(new OpponentDot(x, y, radius, correct));
 
                 if (correct)
                     _renderer.getController().addOpponentScore((int) points);

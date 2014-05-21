@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
+import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
@@ -29,7 +30,7 @@ public class MultiPlayerScreen implements Screen {
 
     WarpClient _warpClient;
 
-    MultiPlayerMessenger _mpMessenger = new MultiPlayerMessenger(this);
+    private MultiPlayerMessenger _mpMessenger = new MultiPlayerMessenger(this);
 
     public static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     public static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";

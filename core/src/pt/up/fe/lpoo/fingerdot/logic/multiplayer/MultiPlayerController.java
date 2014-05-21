@@ -2,6 +2,7 @@ package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
 
 import java.util.ArrayList;
@@ -17,10 +18,14 @@ public class MultiPlayerController extends SinglePlayerController {
     protected int _opponentLives;
 
     private ArrayList<Dot> _dots;
-    private ArrayList<Dot> _opponentTouchedDots;
+    private ArrayList<OpponentDot> _opponentTouchedDots;
 
     public MultiPlayerController(final FingerDot game, int level, int lives) {
         super(level, lives);
+    }
+
+    public void addOpponentDot(OpponentDot dot) {
+        _opponentTouchedDots.add(dot);
     }
 
     public void addOpponentScore(int score) {
