@@ -39,4 +39,11 @@ public class MultiPlayerController extends SinglePlayerController {
     public void setDots(ArrayList<Dot> list) {
         _dots = list;
     }
+
+    public void addDots(ArrayList<Dot> list) {
+        if (_dots == null)
+            _dots = new ArrayList<Dot>();
+
+        _dots.addAll(list);
+    }
 }

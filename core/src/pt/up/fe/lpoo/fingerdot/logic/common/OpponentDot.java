@@ -20,6 +20,4 @@ public class OpponentDot extends Dot {
     public boolean didTouch(int x, int y) {
         return Math.pow((x - _x), 2) + Math.pow((y - _y), 2) < Math.pow(_radius, 2);
     }
-
-
 }

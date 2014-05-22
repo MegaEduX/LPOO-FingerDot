@@ -19,6 +19,7 @@ import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MultiPlayerMessenger implements WarpListener {
     private MultiPlayerScreen _mpScreen;
@@ -27,12 +28,14 @@ public class MultiPlayerMessenger implements WarpListener {
     private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
 
+    private static final int kMaxDotsPerChatMessage = 8;
+
     public void start() {
         WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
 
         WarpController.getInstance().setListener(this);
 
-        WarpController.getInstance().startAppWarp("username");
+        WarpController.getInstance().startAppWarp("username0");
     }
 
     public void stop() {
@@ -65,20 +68,25 @@ public class MultiPlayerMessenger implements WarpListener {
 
     public void onGameStarted(String message) {
         if (WarpController.getInstance().isRoomOwner) {
-            System.out.println("Generating Game...");
+            //  Initializing game with 8 * 15 (120) dots...
 
-            ArrayList<Dot> game = GameGenerator.generateGameWithDots(100);
+            for (int i = 0; i < 15; i++) {
+                HashMap<String, ArrayList<Dot>> game = new HashMap<String, ArrayList<Dot>>();
 
-            try {
-                Gson gs = new Gson();
-                JSONObject data = new JSONObject();
+                game.put("dots", GameGenerator.generateGameWithDots(kMaxDotsPerChatMessage));
 
-                gs.toJson(game);
-                data.put("dots", data);
+                try {
+                    Gson gs = new Gson();
+                    JSONObject data = new JSONObject();
 
-                WarpController.getInstance().sendGameUpdate(data.toString());
-            } catch (Exception exc) {
+                    String gameStr = gs.toJson(game);
 
+                    System.out.println("Sending dots info: " + gameStr);
+
+                    WarpController.getInstance().sendGameUpdate(gameStr);
+                } catch (Exception exc) {
+
+                }
             }
         }
 
@@ -98,17 +106,24 @@ public class MultiPlayerMessenger implements WarpListener {
     }
 
     public void onGameUpdateReceived(String message) {
+        //  System.out.println("Received message: " + message);
+
         try {
             JSONObject data = new JSONObject(message);
 
             if (data.getString("dots") != null && data.getString("dots") != "") {
+                //  Both devices, not only the one acting as client, should use this data.
+                //  Less lag, more fun? That. :)
+
+                System.out.println("Got dots info! This, to be exact: " + data.getString("dots"));
+
                 Gson gs = new Gson();
 
                 Type listType = new TypeToken<ArrayList<Dot>>() {}.getType();
 
                 ArrayList<Dot> d = gs.fromJson(data.getString("dots"), listType);
 
-                _mpScreen.getController().setDots(d);
+                _mpScreen.getController().addDots(d);
             } else {
                 int x = data.getInt("x");
                 int y = data.getInt("y");

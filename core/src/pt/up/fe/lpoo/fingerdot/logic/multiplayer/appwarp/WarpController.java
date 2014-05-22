@@ -72,7 +72,7 @@ public class WarpController {
 		this.warpListener = listener;
 	}
 	
-	public void startAppWarp() {
+	public void stopAppWarp() {
 		if (isConnected) {
 			warpClient.unsubscribeRoom(roomId);
 			warpClient.leaveRoom(roomId);
@@ -134,6 +134,8 @@ public class WarpController {
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("result", "");
 			warpClient.createRoom("gametest", localUser, 2, data);
+
+            isRoomOwner = true;
 		} else {
 			warpClient.disconnect();
 			handleError();
@@ -182,6 +184,8 @@ public class WarpController {
 	}
 	
 	public void onGameUpdateReceived(String message){
+        System.out.println("Received Game Update: " + message);
+
 		String userName = message.substring(0, message.indexOf("#@"));
 		String data = message.substring(message.indexOf("#@") + 2, message.length());
 

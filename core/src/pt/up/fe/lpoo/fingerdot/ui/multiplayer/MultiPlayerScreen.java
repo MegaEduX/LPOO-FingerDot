@@ -51,17 +51,9 @@ public class MultiPlayerScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (_controller.getLives() <= 0) {
-            _game.renderer.begin(ShapeRenderer.ShapeType.Filled);
+            _game.setScreen(new MultiPlayerEndGameScreen());
 
-            _game.renderer.setColor(Color.BLUE);
-
-            _game.renderer.rect(200, 200, _game.camera.viewportWidth - 400, _game.camera.viewportHeight - 400);
-
-            _game.renderer.end();
-
-            if (Gdx.input.isTouched()) {
-                _game.setScreen(new MainMenuScreen());
-            }
+            dispose();
 
             return;
         }

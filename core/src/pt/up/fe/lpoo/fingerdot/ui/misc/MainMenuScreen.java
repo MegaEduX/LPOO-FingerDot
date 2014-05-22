@@ -45,7 +45,7 @@ public class MainMenuScreen implements Screen {
     private int _ticksBeforeProcessingTouches = 30;
 
     public MainMenuScreen() {
-        _menuTexture = new Texture(Gdx.files.internal("MAIN_MENU.png"));
+        _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
 
         _spBounds = new RectangleBounds(450, 800, 230, 310);
         _mpBounds = new RectangleBounds(450, 800, 410, 490);
