@@ -6,6 +6,7 @@ import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * FingerDot
@@ -45,5 +46,53 @@ public class MultiPlayerController extends SinglePlayerController {
             _dots = new ArrayList<Dot>();
 
         _dots.addAll(list);
+    }
+
+    @Override public void performTick() {
+        if (_lives <= 0)
+            return;
+
+        if (_dots.size() == 0) {
+            //  Display an waiting message?
+
+            return;
+        }
+
+        if (_tickCounter > 0)
+            _tickCounter--;
+        else {
+            Dot dot = _dots.get(0);
+
+            _dots.remove(dot);
+            _dotsOnPlay.add(dot);
+
+            _tickCounter = _baseTicks / _level;
+        }
+
+        Iterator<Dot> iter = _dotsOnPlay.iterator();
+
+        while (iter.hasNext()) {
+            Dot dot = iter.next();
+
+            dot.decreaseTicks();
+
+            if (dot.getTicks() <= 0) {
+                iter.remove();
+
+                _lives--;
+            }
+        }
+
+        Iterator<OpponentDot> opIter = _opponentTouchedDots.iterator();
+
+        while (opIter.hasNext()) {
+            OpponentDot dot = opIter.next();
+
+            dot.decreaseTicks();
+
+            if (dot.getTicks() <= 0) {
+                iter.remove();
+            }
+        }
     }
 }

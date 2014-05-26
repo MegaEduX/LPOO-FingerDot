@@ -2,18 +2,12 @@ package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
-import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerController;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by MegaEduX on 05/05/14.
@@ -51,6 +45,8 @@ public class MultiPlayerScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (_controller.getLives() <= 0) {
+            _mpMessenger.broadcastLoss();
+
             _game.setScreen(new MultiPlayerEndGameScreen());
 
             dispose();
@@ -71,8 +67,11 @@ public class MultiPlayerScreen implements Screen {
 
             if (x > _game.camera.viewportWidth - 75 && x < _game.camera.viewportWidth + 75 && y > 675)
                 pause();
-            else
-                _controller.performTouch(x, y);
+            else {
+                int points = _controller.performTouch(x, y);
+
+                _mpMessenger.broadcastTouch(x, y, points, points > 0);
+            }
 
             _isTouching = true;
         }

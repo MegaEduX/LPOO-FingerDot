@@ -28,7 +28,7 @@ public class MultiPlayerMessenger implements WarpListener {
     private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
 
-    private static final int kMaxDotsPerChatMessage = 8;
+    private static final int kMaxDotsPerChatMessage = 6;    //  Theoretically this is 8, but let's play safe.
 
     public void start() {
         WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
@@ -50,14 +50,13 @@ public class MultiPlayerMessenger implements WarpListener {
         _mpmScreen = mpms;
     }
 
-    public void broadcastTouch(int x, int y, float points, int radius, boolean correct) {
+    public void broadcastTouch(int x, int y, float points, boolean correct) {
         try {
             JSONObject data = new JSONObject();
 
             data.put("x", x);
             data.put("y", y);
             data.put("points", points);
-            data.put("radius", radius);
             data.put("correct", correct);
 
             WarpController.getInstance().sendGameUpdate(data.toString());
@@ -66,11 +65,36 @@ public class MultiPlayerMessenger implements WarpListener {
         }
     }
 
+    public void broadcastLoss() {
+        try {
+            JSONObject data = new JSONObject();
+
+            data.put("gameOver", "noLives");
+
+            WarpController.getInstance().sendGameUpdate(data.toString());
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void broadcastEndOfGame(int score) {
+        try {
+            JSONObject data = new JSONObject();
+
+            data.put("gameOver", "endOfGame");
+            data.put("points", score);
+
+            WarpController.getInstance().sendGameUpdate(data.toString());
+        } catch (Exception e) {
+
+        }
+    }
+
     public void onGameStarted(String message) {
         if (WarpController.getInstance().isRoomOwner) {
-            //  Initializing game with 8 * 15 (120) dots...
+            //  Initializing game with 6 * 40 (240) dots... Should be enough for a long game. :P
 
-            for (int i = 0; i < 15; i++) {
+            for (int i = 0; i < 40; i++) {
                 HashMap<String, ArrayList<Dot>> game = new HashMap<String, ArrayList<Dot>>();
 
                 game.put("dots", GameGenerator.generateGameWithDots(kMaxDotsPerChatMessage));
@@ -111,7 +135,7 @@ public class MultiPlayerMessenger implements WarpListener {
         try {
             JSONObject data = new JSONObject(message);
 
-            if (data.getString("dots") != null && data.getString("dots") != "") {
+            if (data.getString("dots") != null && !data.getString("dots").equals("")) {
                 //  Both devices, not only the one acting as client, should use this data.
                 //  Less lag, more fun? That. :)
 
@@ -132,9 +156,7 @@ public class MultiPlayerMessenger implements WarpListener {
                 float points = (float)data.getDouble("points");
                 boolean correct = data.getBoolean("correct");
 
-                //  _mpScreen.renderEnemyTouch(x, y, correct);
-
-                _mpScreen.getController().addOpponentDot(new OpponentDot(x, y, radius, correct));
+                _mpScreen.getController().addOpponentDot(new OpponentDot(x, y, radius / 2, correct));
 
                 if (correct)
                     _mpScreen.getController().addOpponentScore((int) points);

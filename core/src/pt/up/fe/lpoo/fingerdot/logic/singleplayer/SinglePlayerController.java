@@ -80,8 +80,10 @@ public class SinglePlayerController {
         }
     }
 
-    public void performTouch(int xCoordinate, int yCoordinate) {
+    public int performTouch(int xCoordinate, int yCoordinate) {
         boolean correct = false;
+
+        int ret = 0;
 
         Iterator<Dot> iter = _dotsOnPlay.iterator();
 
@@ -91,7 +93,9 @@ public class SinglePlayerController {
             if (dot.didTouch(xCoordinate, (int) (_game.camera.viewportHeight - yCoordinate))) {
                 correct = true;
 
-                _score += (dot.getScore() * _scoreMultiplier);
+                ret = (int)(dot.getScore() * _scoreMultiplier);
+
+                _score += ret;
 
                 iter.remove();
 
@@ -109,6 +113,8 @@ public class SinglePlayerController {
 
         if (!correct)
             _lives--;
+
+        return ret;
     }
 
     public int getLives() {
