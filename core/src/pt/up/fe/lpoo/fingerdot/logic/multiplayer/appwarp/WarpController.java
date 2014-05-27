@@ -193,9 +193,8 @@ public class WarpController {
 		String userName = message.substring(0, message.indexOf("#@"));
 		String data = message.substring(message.indexOf("#@") + 2, message.length());
 
-		if (!localUser.equals(userName) || data.contains("{\"dots\":[{\"")) {
+		if (!localUser.equals(userName) || data.contains("{\"_gd\":[{"))
 			warpListener.onGameUpdateReceived(data);
-		}
 	}
 	
 	public void onResultUpdateReceived(String userName, int code){

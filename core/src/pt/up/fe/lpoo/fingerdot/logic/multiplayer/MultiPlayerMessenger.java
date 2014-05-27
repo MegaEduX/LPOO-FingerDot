@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class MultiPlayerMessenger implements WarpListener {
-    private MultiPlayerScreen _mpScreen;
-    private MultiPlayerMatchmakingScreen _mpmScreen;
+    private MultiPlayerScreen _mpScreen = null;
+    private MultiPlayerMatchmakingScreen _mpmScreen = null;
+
+    private GameBuilder _gameBuilder = null;
 
     private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
@@ -104,14 +106,10 @@ public class MultiPlayerMessenger implements WarpListener {
             final int messages = 40;
 
             for (int i = 0; i < messages; i++) {
-                HashMap<String, GameGeneratorPart> game = new HashMap<String, GameGeneratorPart>();
-
-                game.put("dots", GameGenerator.generateGamePartWithDots(kMaxDotsPerChatMessage, i, messages));
-
                 try {
                     Gson gs = new Gson();
 
-                    String gameStr = gs.toJson(game);
+                    String gameStr = gs.toJson(GameGenerator.generateGamePartWithDots(kMaxDotsPerChatMessage, i, messages));
 
                     System.out.println("Sending dots info: " + gameStr);
 
@@ -137,25 +135,34 @@ public class MultiPlayerMessenger implements WarpListener {
 
     }
 
+    public void onDotsReceived(ArrayList<Dot> dots) {
+        _mpScreen.getController().setDots(dots);
+    }
+
     public void onGameUpdateReceived(String message) {
-        //  System.out.println("Received message: " + message);
+        System.out.println("Received message: " + message);
 
         try {
             JSONObject data = new JSONObject(message);
 
-            if (data.getString("dots") != null && !data.getString("dots").equals("")) {
+            if (message.contains("{\"_gd\":[{\"")) {
                 //  Both devices, not only the one acting as client, should use this data.
                 //  Less lag, more fun? That. :)
 
-                System.out.println("Got dots info! This, to be exact: " + data.getString("dots"));
+                System.out.println("Got dots info! This, to be exact: " + data.getString("_gd"));
 
                 Gson gs = new Gson();
 
-                Type listType = new TypeToken<GameGeneratorPart>(){}.getType();
+                Type gameGeneratorPartType = new TypeToken<GameGeneratorPart>(){}.getType();
 
-                GameGeneratorPart d = gs.fromJson(data.getString("dots"), listType);
+                GameGeneratorPart d = gs.fromJson(data.toString(), gameGeneratorPartType);
 
-                _mpScreen.getController().addDots(d.getDots());
+                //  _mpScreen.getController().addDots(d.getDots());
+
+                if (_gameBuilder == null)
+                    _gameBuilder = new GameBuilder(this);
+
+                _gameBuilder.addPart(d);
             } else {
                 int x = data.getInt("x");
                 int y = data.getInt("y");
