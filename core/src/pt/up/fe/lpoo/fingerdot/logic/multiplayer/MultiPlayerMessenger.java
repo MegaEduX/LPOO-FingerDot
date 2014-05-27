@@ -20,6 +20,7 @@ import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class MultiPlayerMessenger implements WarpListener {
     private MultiPlayerScreen _mpScreen;
@@ -35,7 +36,13 @@ public class MultiPlayerMessenger implements WarpListener {
 
         WarpController.getInstance().setListener(this);
 
-        WarpController.getInstance().startAppWarp("username0");
+        Random rand = new Random();
+
+        String username = "username" + rand.nextInt(5000) + 10;
+
+        System.out.println("Initializing with username \"" + username + "\"...");
+
+        WarpController.getInstance().startAppWarp(username);
     }
 
     public void stop() {
@@ -94,14 +101,15 @@ public class MultiPlayerMessenger implements WarpListener {
         if (WarpController.getInstance().isRoomOwner) {
             //  Initializing game with 6 * 40 (240) dots... Should be enough for a long game. :P
 
-            for (int i = 0; i < 40; i++) {
-                HashMap<String, ArrayList<Dot>> game = new HashMap<String, ArrayList<Dot>>();
+            final int messages = 40;
 
-                game.put("dots", GameGenerator.generateGameWithDots(kMaxDotsPerChatMessage));
+            for (int i = 0; i < messages; i++) {
+                HashMap<String, GameGeneratorPart> game = new HashMap<String, GameGeneratorPart>();
+
+                game.put("dots", GameGenerator.generateGamePartWithDots(kMaxDotsPerChatMessage, i, messages));
 
                 try {
                     Gson gs = new Gson();
-                    JSONObject data = new JSONObject();
 
                     String gameStr = gs.toJson(game);
 
@@ -143,11 +151,11 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 Gson gs = new Gson();
 
-                Type listType = new TypeToken<ArrayList<Dot>>() {}.getType();
+                Type listType = new TypeToken<GameGeneratorPart>(){}.getType();
 
-                ArrayList<Dot> d = gs.fromJson(data.getString("dots"), listType);
+                GameGeneratorPart d = gs.fromJson(data.getString("dots"), listType);
 
-                _mpScreen.getController().addDots(d);
+                _mpScreen.getController().addDots(d.getDots());
             } else {
                 int x = data.getInt("x");
                 int y = data.getInt("y");

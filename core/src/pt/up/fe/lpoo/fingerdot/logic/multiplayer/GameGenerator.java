@@ -41,4 +41,8 @@ public class GameGenerator {
 
         return ret;
     }
+
+    static public GameGeneratorPart generateGamePartWithDots(int dotsNumber, int part, int parts) {
+        return new GameGeneratorPart(generateGameWithDots(dotsNumber), part, parts);
+    }
 }

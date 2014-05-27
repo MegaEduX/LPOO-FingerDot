@@ -19,7 +19,7 @@ public class MultiPlayerController extends SinglePlayerController {
     protected int _opponentLives;
 
     private ArrayList<Dot> _dots;
-    private ArrayList<OpponentDot> _opponentTouchedDots;
+    private ArrayList<OpponentDot> _opponentTouchedDots = new ArrayList<OpponentDot>();
 
     public MultiPlayerController(final FingerDot game, int level, int lives) {
         super(level, lives);
@@ -52,8 +52,8 @@ public class MultiPlayerController extends SinglePlayerController {
         if (_lives <= 0)
             return;
 
-        if (_dots.size() == 0) {
-            //  Display an waiting message?
+        if (_dots == null || _dots.size() == 0) {
+            //  Display an waiting message? Maybe the game has ended? Whaaaaa.
 
             return;
         }

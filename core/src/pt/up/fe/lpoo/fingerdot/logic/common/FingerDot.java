@@ -1,6 +1,8 @@
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -35,6 +37,10 @@ public class FingerDot extends Game {
 
         batch.setProjectionMatrix(camera.combined);
         renderer.setProjectionMatrix(camera.combined);
+
+        if (Gdx.input.isPeripheralAvailable(Input.Peripheral.Accelerometer)) {
+
+        }
 
         this.setScreen(new MainMenuScreen());
     }

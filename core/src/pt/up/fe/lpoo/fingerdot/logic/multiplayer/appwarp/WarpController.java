@@ -133,7 +133,7 @@ public class WarpController {
 		} else if (event.getResult()==WarpResponseResultCode.RESOURCE_NOT_FOUND) {// no such room found
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("result", "");
-			warpClient.createRoom("gametest", localUser, 2, data);
+			warpClient.createRoom("gt", localUser, 2, data);
 
             isRoomOwner = true;
 		} else {
@@ -156,6 +156,10 @@ public class WarpController {
 	
 	public void onGetLiveRoomInfo(String[] liveUsers){
 		log("onGetLiveRoomInfo: "+liveUsers.length);
+
+        for (String user : liveUsers) {
+            log(user);
+        }
 
 		if (liveUsers != null) {
 			if (liveUsers.length == 2){
@@ -189,7 +193,7 @@ public class WarpController {
 		String userName = message.substring(0, message.indexOf("#@"));
 		String data = message.substring(message.indexOf("#@") + 2, message.length());
 
-		if (!localUser.equals(userName)) {
+		if (!localUser.equals(userName) || data.contains("{\"dots\":[{\"")) {
 			warpListener.onGameUpdateReceived(data);
 		}
 	}

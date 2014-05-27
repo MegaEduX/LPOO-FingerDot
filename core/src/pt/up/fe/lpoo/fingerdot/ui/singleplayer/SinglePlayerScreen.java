@@ -57,7 +57,7 @@ public class SinglePlayerScreen implements Screen {
         }
 
         if (_controller.getLives() <= 0) {
-            _game.setScreen(new SinglePlayerEndGameScreen());
+            _game.setScreen(new SinglePlayerEndGameScreen(_controller.getScore()));
 
             dispose();
 

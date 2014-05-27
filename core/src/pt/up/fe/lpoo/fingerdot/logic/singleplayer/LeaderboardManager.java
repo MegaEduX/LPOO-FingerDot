@@ -18,17 +18,28 @@ import java.util.HashMap;
  * Created by MegaEduX on 23/05/14.
  */
 
-public class LeaderboardController {
-    private static final String baseApiURL = "https://edr.io/fingerdot/v1/leaderboard/";
-    private static final String leaderboardURL = baseApiURL + "get_leaderboard.php";
-    private static final String postScoreURL = baseApiURL + "add_score.php";
+public class LeaderboardManager {
+    private static final String kBaseApiURL = "https://edr.io/fingerdot/v1/leaderboard/";
+    private static final String kLeaderboardURL = kBaseApiURL + "get_leaderboard.php";
+    private static final String kPostScoreURL = kBaseApiURL + "add_score.php";
+
+    private static final String kLocalLeaderboardPath = "local_highscores.fdh";
 
     private ArrayList<LeaderboardEntry> _onlineLeaderboard = null;
     private ArrayList<LeaderboardEntry> _localLeaderboard = null;
 
     private LeaderboardEntryComparator lec = new LeaderboardEntryComparator();
 
-    public LeaderboardController() {
+    private static LeaderboardManager _sharedInstance = null;
+
+    public static LeaderboardManager sharedManager() {
+        if (_sharedInstance == null)
+            _sharedInstance = new LeaderboardManager();
+
+        return _sharedInstance;
+    }
+
+    private LeaderboardManager() {
         loadLocalLeaderboard();
     }
 
@@ -41,7 +52,7 @@ public class LeaderboardController {
     }
 
     public boolean loadLocalLeaderboard() {
-        FileHandle file = Gdx.files.local("local_highscores.fdh");
+        FileHandle file = Gdx.files.local(kLocalLeaderboardPath);
 
         if (file.exists()) {
             try {
@@ -63,7 +74,7 @@ public class LeaderboardController {
     }
 
     public boolean saveLocalLeaderboard() {
-        FileHandle file = Gdx.files.local("local_highscores.fdh");
+        FileHandle file = Gdx.files.local(kLocalLeaderboardPath);
 
         try {
             ObjectOutputStream oos = new ObjectOutputStream(file.write(false));
@@ -80,7 +91,7 @@ public class LeaderboardController {
 
     public boolean getOnlineLeaderboard() {
         try {
-            URL lbURL = new URL(leaderboardURL);
+            URL lbURL = new URL(kLeaderboardURL);
 
             HttpsURLConnection connection = (HttpsURLConnection) lbURL.openConnection();
 
@@ -108,9 +119,9 @@ public class LeaderboardController {
         return true;
     }
 
-    public static boolean publishScoreOnOnlineLeaderboard(String username, int score, String version) {
+    public static boolean publishScoreOnOnlineLeaderboard(LeaderboardEntry entry) {
         try {
-            URL lbURL = new URL(postScoreURL + "?username=" + username + "&score=" + score + "&version=" + version);
+            URL lbURL = new URL(kPostScoreURL + "?username=" + entry.username + "&score=" + entry.score + "&version=" + entry.version);
 
             HttpsURLConnection connection = (HttpsURLConnection) lbURL.openConnection();
 

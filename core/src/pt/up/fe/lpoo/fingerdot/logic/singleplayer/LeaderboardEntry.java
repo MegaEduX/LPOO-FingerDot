@@ -12,4 +12,15 @@ public class LeaderboardEntry {
     public String version;
 
     public int score;
+
+    public LeaderboardEntry() {
+
+    }
+
+    public LeaderboardEntry(String n, String t, String v, int s) {
+        username = n;
+        timestamp = t;
+        version = v;
+        score = s;
+    }
 }

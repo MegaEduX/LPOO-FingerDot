@@ -3,6 +3,8 @@ package pt.up.fe.lpoo.fingerdot.ui.singleplayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 
@@ -17,6 +19,17 @@ public class SinglePlayerEndGameScreen implements Screen {
     final FingerDot _game = FingerDot.sharedInstance;
 
     int _ticksBeforeProcessingTouches = 30;
+
+    public SinglePlayerEndGameScreen(int finalScore) {
+
+    }
+
+    public void publishScore() {
+        LeaderboardEntry entry = new LeaderboardEntry("a", "b", "c", 4);
+
+        LeaderboardManager.sharedManager().addLocalScore(entry);
+        LeaderboardManager.sharedManager().publishScoreOnOnlineLeaderboard(entry);
+    }
 
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
