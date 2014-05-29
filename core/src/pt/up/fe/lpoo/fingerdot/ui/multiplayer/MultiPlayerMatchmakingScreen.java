@@ -25,7 +25,7 @@ public class MultiPlayerMatchmakingScreen implements Screen {
     public void startGame() {
         System.out.println("Starting MP Game...");
 
-        FingerDot.sharedInstance.setScreen(new MultiPlayerScreen(_msg));
+        FingerDot.getSharedInstance().setScreen(new MultiPlayerScreen(_msg));
     }
 
     @Override public void show() {

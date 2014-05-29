@@ -49,4 +49,8 @@ public class Dot {
     public int getScore() {
         return _radius * _ticks;
     }
+
+    public int getBaseScore() {
+        return _radius * 100;
+    }
 }

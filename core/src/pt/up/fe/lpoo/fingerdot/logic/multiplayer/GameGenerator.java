@@ -22,7 +22,7 @@ public class GameGenerator {
         int level = 1;
         int toAdvance = _baseAdvanceLevel;
 
-        final FingerDot game = FingerDot.sharedInstance;
+        final FingerDot game = FingerDot.getSharedInstance();
 
         Random rng = new Random();;
 

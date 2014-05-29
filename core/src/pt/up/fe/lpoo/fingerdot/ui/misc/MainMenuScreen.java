@@ -34,7 +34,7 @@ public class MainMenuScreen implements Screen {
         }
     }
 
-    final FingerDot _game = FingerDot.sharedInstance;
+    final FingerDot _game = FingerDot.getSharedInstance();
 
     Texture _menuTexture;
 

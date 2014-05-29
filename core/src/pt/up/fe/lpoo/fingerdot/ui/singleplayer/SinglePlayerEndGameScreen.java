@@ -16,7 +16,7 @@ import java.util.TimerTask;
  */
 
 public class SinglePlayerEndGameScreen implements Screen {
-    final FingerDot _game = FingerDot.sharedInstance;
+    final FingerDot _game = FingerDot.getSharedInstance();
 
     int _ticksBeforeProcessingTouches = 30;
 

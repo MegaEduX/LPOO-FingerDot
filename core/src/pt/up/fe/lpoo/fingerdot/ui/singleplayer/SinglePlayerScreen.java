@@ -16,7 +16,7 @@ import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
  */
 
 public class SinglePlayerScreen implements Screen {
-    final FingerDot _game = FingerDot.sharedInstance;
+    final FingerDot _game = FingerDot.getSharedInstance();
 
     boolean _isTouching = false;
 

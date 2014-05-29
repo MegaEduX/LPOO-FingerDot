@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
@@ -14,7 +15,7 @@ import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerController;
  */
 
 public class MultiPlayerScreen implements Screen {
-    final FingerDot _game = FingerDot.sharedInstance;
+    final FingerDot _game = FingerDot.getSharedInstance();
 
     boolean _isTouching = false;
 
@@ -32,6 +33,8 @@ public class MultiPlayerScreen implements Screen {
         _mpMessenger = msg;
 
         _mpMessenger.setMultiPlayerScreen(this);
+
+        _controller.setMessenger(_mpMessenger);
     }
 
     public MultiPlayerController getController() {
@@ -47,6 +50,10 @@ public class MultiPlayerScreen implements Screen {
         if (_controller.getLives() <= 0) {
             _mpMessenger.broadcastLoss();
 
+            _controller.setGameState(false);
+        }
+
+        if (!_controller.getGameState()) {
             _game.setScreen(new MultiPlayerEndGameScreen());
 
             dispose();
@@ -87,6 +94,12 @@ public class MultiPlayerScreen implements Screen {
             _game.renderer.setColor(1.0f, 0.0f, 0.0f, (float)aDot.getTicks() / 100.0f);
 
             _game.renderer.circle(aDot.getX(), aDot.getY(), aDot.getRadius());
+        }
+
+        for (OpponentDot od : _controller.getOpponentTouchedDots()) {
+            _game.renderer.setColor(0.0f, od.getCorrect() ? 0.0f : 1.0f, od.getCorrect() ? 1.0f : 0.0f, (float)od.getTicks() / 100.0f);
+
+            _game.renderer.circle(od.getX(), od.getY(), od.getRadius());
         }
 
         _game.renderer.end();

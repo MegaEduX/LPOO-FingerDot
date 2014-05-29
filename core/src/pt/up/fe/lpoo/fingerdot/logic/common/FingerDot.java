@@ -20,11 +20,15 @@ public class FingerDot extends Game {
     public BitmapFont font;
     public OrthographicCamera camera;
 
-    public static FingerDot sharedInstance;
+    private static FingerDot _sharedInstance;
+
+    public static FingerDot getSharedInstance() {
+        return _sharedInstance;
+    }
 
     public void create() {
-        if (sharedInstance == null)
-            sharedInstance = this;
+        if (_sharedInstance == null)
+            _sharedInstance = this;
         else
             return;
 

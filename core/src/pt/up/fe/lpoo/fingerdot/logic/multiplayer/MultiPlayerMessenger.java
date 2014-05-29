@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
+import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.*;
 
@@ -30,6 +31,8 @@ public class MultiPlayerMessenger implements WarpListener {
 
     private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
+
+    private static final int kOpponentDotSize = 50;
 
     private static final int kMaxDotsPerChatMessage = 6;    //  Theoretically this is 8, but let's play safe.
 
@@ -64,7 +67,7 @@ public class MultiPlayerMessenger implements WarpListener {
             JSONObject data = new JSONObject();
 
             data.put("x", x);
-            data.put("y", y);
+            data.put("y", FingerDot.getSharedInstance().camera.viewportHeight - y);
             data.put("points", points);
             data.put("correct", correct);
 
@@ -157,21 +160,20 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 GameGeneratorPart d = gs.fromJson(data.toString(), gameGeneratorPartType);
 
-                //  _mpScreen.getController().addDots(d.getDots());
-
                 if (_gameBuilder == null)
                     _gameBuilder = new GameBuilder(this);
 
                 _gameBuilder.addPart(d);
-            } else {
+            } else if (message.contains("{\"correct\":")) {
+                System.out.println("Got an opponent touch!");
+
                 int x = data.getInt("x");
                 int y = data.getInt("y");
-                int radius = data.getInt("radius");
 
                 float points = (float)data.getDouble("points");
                 boolean correct = data.getBoolean("correct");
 
-                _mpScreen.getController().addOpponentDot(new OpponentDot(x, y, radius / 2, correct));
+                _mpScreen.getController().addOpponentDot(new OpponentDot(x, y, kOpponentDotSize, correct));
 
                 if (correct)
                     _mpScreen.getController().addOpponentScore((int) points);
@@ -179,6 +181,11 @@ public class MultiPlayerMessenger implements WarpListener {
                     _mpScreen.getController().removeOpponentLife();
 
                 //  Points somewhere!
+            } else if (message.contains("{\"gameOver\"")) {
+                _mpScreen.getController().setGameState(false);
+                //  _mpScreen.getController().set
+            } else {
+                //  Unknown message? :o
             }
         } catch (Exception e) {
             // exception

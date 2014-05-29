@@ -15,14 +15,24 @@ import java.util.Iterator;
  */
 
 public class MultiPlayerController extends SinglePlayerController {
+    private boolean _gameState = true;
+
     protected int _opponentScore;
     protected int _opponentLives;
 
     private ArrayList<Dot> _dots;
     private ArrayList<OpponentDot> _opponentTouchedDots = new ArrayList<OpponentDot>();
 
+    private MultiPlayerMessenger _mpMessenger = null;
+
+    private static final int kOpponentFailedDotBaseScore = 100000;
+
     public MultiPlayerController(final FingerDot game, int level, int lives) {
         super(level, lives);
+    }
+
+    public void setMessenger(MultiPlayerMessenger msg) {
+        _mpMessenger = msg;
     }
 
     public void addOpponentDot(OpponentDot dot) {
@@ -41,19 +51,26 @@ public class MultiPlayerController extends SinglePlayerController {
         _dots = list;
     }
 
-    public void addDots(ArrayList<Dot> list) {
-        if (_dots == null)
-            _dots = new ArrayList<Dot>();
+    public void setGameState(boolean ended) {
+        _gameState = ended;
+    }
 
-        _dots.addAll(list);
+    public boolean getGameState() {
+        return _gameState;
+    }
+
+    public ArrayList<OpponentDot> getOpponentTouchedDots() {
+        return _opponentTouchedDots;
     }
 
     @Override public void performTick() {
-        if (_lives <= 0)
+        if (_lives <= 0 || _dots == null || !_gameState)
             return;
 
-        if (_dots == null || _dots.size() == 0) {
-            //  Display an waiting message? Maybe the game has ended? Whaaaaa.
+        if (_dots.size() == 0 && _gameState) {   //  The game has ended, but not marked as so yet.
+            _mpMessenger.broadcastEndOfGame(_score);
+
+            _gameState = false;
 
             return;
         }
@@ -79,6 +96,8 @@ public class MultiPlayerController extends SinglePlayerController {
             if (dot.getTicks() <= 0) {
                 iter.remove();
 
+                _mpMessenger.broadcastTouch(dot.getX(), dot.getY(), dot.getBaseScore(), false);
+
                 _lives--;
             }
         }
@@ -91,8 +110,73 @@ public class MultiPlayerController extends SinglePlayerController {
             dot.decreaseTicks();
 
             if (dot.getTicks() <= 0) {
-                iter.remove();
+                opIter.remove();
             }
         }
+    }
+
+    @Override public int performTouch(int xCoordinate, int yCoordinate) {
+        boolean correct = false;
+
+        int ret = 0;
+
+        Iterator<Dot> iter = _dotsOnPlay.iterator();
+
+        while (iter.hasNext()) {
+            Dot dot = iter.next();
+
+            if (dot.didTouch(xCoordinate, (int) (_game.camera.viewportHeight - yCoordinate))) {
+                correct = true;
+
+                ret = (int)(dot.getScore() * _scoreMultiplier);
+
+                iter.remove();
+
+                synchronized (this) {
+                    _score += ret;
+
+                    _leftToAdvanceLevel--;
+
+                    if (_leftToAdvanceLevel <= 0) {
+                        increaseLevel();
+                    }
+                }
+
+                _mpMessenger.broadcastTouch(xCoordinate, yCoordinate, _score, true);
+
+                break;
+            }
+        }
+
+        Iterator<OpponentDot> opIter = _opponentTouchedDots.iterator();
+
+        while (opIter.hasNext()) {
+            OpponentDot dot = opIter.next();
+
+            if (dot.getCorrect())
+                continue;
+
+            if (dot.didTouch(xCoordinate, (int) (_game.camera.viewportHeight - yCoordinate))) {
+                correct = true;
+
+                ret = (int)(kOpponentFailedDotBaseScore * _scoreMultiplier);
+
+                synchronized (this) {
+                    _score += ret;
+                }
+
+                opIter.remove();
+
+                break;
+            }
+        }
+
+        if (!correct) {
+            _lives--;
+
+            _mpMessenger.broadcastTouch(xCoordinate, yCoordinate, 0, false);
+        }
+
+        return ret;
     }
 }

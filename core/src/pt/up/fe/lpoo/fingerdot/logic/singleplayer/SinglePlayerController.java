@@ -14,7 +14,7 @@ import java.util.Random;
  */
 
 public class SinglePlayerController {
-    protected final FingerDot _game = FingerDot.sharedInstance;
+    protected final FingerDot _game = FingerDot.getSharedInstance();
 
     static protected int _baseAdvanceLevel = 20;
     static protected int _baseTicks = 120;
