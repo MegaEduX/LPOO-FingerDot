@@ -85,9 +85,9 @@ public class MainMenuScreen implements Screen {
 
                 dispose();
             } else if (_lbBounds.isInside(x, y)) {
-                /* _game.setScreen(new LeaderBoardScreen());
+                _game.setScreen(new LeaderboardScreen());
 
-                dispose();*/
+                dispose();
             }
         }
     }
