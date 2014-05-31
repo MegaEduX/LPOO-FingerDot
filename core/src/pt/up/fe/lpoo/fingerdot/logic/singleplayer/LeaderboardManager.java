@@ -3,12 +3,15 @@ package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import pt.up.fe.lpoo.fingerdot.logic.multiplayer.GameGeneratorPart;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -89,7 +92,7 @@ public class LeaderboardManager {
         return false;
     }
 
-    public boolean getOnlineLeaderboard() {
+    public boolean retrieveOnlineLeaderboard() {
         try {
             URL lbURL = new URL(kLeaderboardURL);
 
@@ -106,7 +109,9 @@ public class LeaderboardManager {
 
                 Gson gs = new Gson();
 
-                _onlineLeaderboard = gs.fromJson(sb.toString(), (new ArrayList<LeaderboardEntry>()).getClass());
+                Type leaderboardType = new TypeToken<ArrayList<LeaderboardEntry>>(){}.getType();
+
+                _onlineLeaderboard = gs.fromJson(sb.toString(), leaderboardType);
             } catch (Exception e) {
                 return false;
             } finally {
@@ -117,6 +122,10 @@ public class LeaderboardManager {
         }
 
         return true;
+    }
+
+    public ArrayList<LeaderboardEntry> getOnlineLeaderboard() {
+        return _onlineLeaderboard;
     }
 
     public static boolean publishScoreOnOnlineLeaderboard(LeaderboardEntry entry) {
