@@ -3,19 +3,32 @@ package pt.up.fe.lpoo.fingerdot.ui.misc;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
+
+import java.util.logging.FileHandler;
 
 /**
  * Created by MegaEduX on 20/05/14.
  */
 
 public class LeaderboardScreen implements Screen {
+    private static final int kTableHeightHeader = 100;
+    private static final int kTableHeightNormal = 50;
+
+    private static final String kFontFileName = "hecubus.ttf";
+
     private Stage _stage = null;
-    private Skin _skin = null;
 
     public LeaderboardScreen() {
         _stage = new Stage(new ScreenViewport(FingerDot.getSharedInstance().camera));
@@ -25,20 +38,17 @@ public class LeaderboardScreen implements Screen {
 
 
         Table table = new Table();
-        table.setSize(800,480);
+        table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight);
 
-        //  Label
+        FileHandle fontFile = Gdx.files.internal(kFontFileName);
 
-        Label position = new Label("#", _skin);
-        table.add(position).width(100).height(100);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
 
-        Label name = new Label("Nickname", _skin);
-        table.add(name).width(150).height(100);
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        Label score = new Label("Score", _skin);
-        table.add(score).width(150).height(100);
+        param.size = 48;
 
-        table.row();
+        BitmapFont headerFont = generator.generateFont(param);
 
 
         _stage.addActor(table);
