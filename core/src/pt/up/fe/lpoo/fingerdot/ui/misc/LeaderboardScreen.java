@@ -54,21 +54,9 @@ public class LeaderboardScreen implements Screen {
         hsTable.setX(125);
         hsTable.setY(100);
 
-        FileHandle fontFile = Gdx.files.internal(kFontFileName);
+        BitmapFont headerFont = FontGenerator.generateBitmapFont(42);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-
-        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        param.size = 42;
-
-        BitmapFont headerFont = generator.generateFont(param);
-
-        param.size = 26;
-
-        BitmapFont font = generator.generateFont(param);
-
-        generator.dispose();
+        BitmapFont font = FontGenerator.generateBitmapFont(26);
 
         Label.LabelStyle fontStyle = new Label.LabelStyle(headerFont, Color.WHITE);
 
@@ -127,7 +115,7 @@ public class LeaderboardScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         TextButton localButton = new TextButton("Local", skin);
-        optTable.add(localButton).width(250).height(75);
+        optTable.add(localButton).width(250).height(75).pad(10);
 
         localButton.addListener(new ClickListener() {
             @Override
@@ -141,7 +129,7 @@ public class LeaderboardScreen implements Screen {
         });
 
         TextButton mpButton = new TextButton("Online", skin);
-        optTable.add(mpButton).width(250).height(75);
+        optTable.add(mpButton).width(250).height(75).pad(10);
 
         mpButton.addListener(new ClickListener() {
             @Override
@@ -162,7 +150,7 @@ public class LeaderboardScreen implements Screen {
         if (Gdx.app.getType() == Application.ApplicationType.Android)
             return;
 
-        TextButton backButton = new TextButton("Back", skin);
+        TextButton backButton = new TextButton("< Back", skin);
         backTable.add(backButton).width(150).height(75);
 
         backButton.addListener(new ClickListener() {

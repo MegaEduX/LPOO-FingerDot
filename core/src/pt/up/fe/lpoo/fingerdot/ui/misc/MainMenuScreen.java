@@ -30,45 +30,19 @@ import pt.up.fe.lpoo.fingerdot.ui.singleplayer.SinglePlayerScreen;
 import java.io.FileInputStream;
 
 public class MainMenuScreen implements Screen {
-    private class RectangleBounds {
-        public int startX;
-        public int endX;
-        public int startY;
-        public int endY;
-
-        public RectangleBounds(int sx, int ex, int sy, int ey) {
-            startX = sx;
-            endX = ex;
-            startY = sy;
-            endY = ey;
-        }
-
-        public boolean isInside(int x, int y) {
-            return (x >= startX && x <= endX && y >= startY && y <= endY);
-        }
-    }
-
-    final FingerDot _game = FingerDot.getSharedInstance();
-
-    Texture _menuTexture;
-
-    RectangleBounds _spBounds;
-    RectangleBounds _mpBounds;
-    RectangleBounds _lbBounds;
-
-    private Skin _skin = null;
-    private Stage _stage = null;
-
-    private int _ticksBeforeProcessingTouches = 30;
+    private static final int kButtonWidth = 400;
+    private static final int kButtonHeight = 100;
 
     private static final String kFontFileName = "hecubus.ttf";
 
+    private static final FingerDot _game = FingerDot.getSharedInstance();
+
+    private Texture _menuTexture = null;
+    private Skin _skin = null;
+    private Stage _stage = null;
+
     public MainMenuScreen() {
         _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
-
-        _spBounds = new RectangleBounds(450, 800, 230, 310);
-        _mpBounds = new RectangleBounds(450, 800, 410, 490);
-        _lbBounds = new RectangleBounds(450, 800, 570, 650);
 
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setCatchMenuKey(true);
@@ -97,15 +71,15 @@ public class MainMenuScreen implements Screen {
         TextButton singlePlayer = new TextButton("Singleplayer", _skin);
 
         //  singlePlayer.getLabel().setStyle(font); not this but near
-        table.add(singlePlayer).width(250).height(100).padBottom(20);
+        table.add(singlePlayer).width(kButtonWidth).height(kButtonHeight).padBottom(20);
         table.row();
 
         TextButton multiPlayer = new TextButton("Multiplayer",_skin);
-        table.add(multiPlayer).width(250).height(100).padBottom(20);
+        table.add(multiPlayer).width(kButtonWidth).height(kButtonHeight).padBottom(20);
         table.row();
 
         TextButton leaderBoard = new TextButton("Leaderboard",_skin);
-        table.add(leaderBoard).width(250).height(100);
+        table.add(leaderBoard).width(kButtonWidth).height(kButtonHeight);
         table.row();
 
         _stage.addActor(table);
@@ -124,7 +98,7 @@ public class MainMenuScreen implements Screen {
         multiPlayer.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                _game.setScreen(new MultiPlayerScreen());
+                _game.setScreen(new MultiPlayerMatchmakingScreen());
 
                 dispose();
             };
@@ -170,12 +144,6 @@ public class MainMenuScreen implements Screen {
         _game.batch.begin();
         _game.batch.draw(_menuTexture, 0, 0);
         _game.batch.end();
-
-        if (_ticksBeforeProcessingTouches > 0) {
-            _ticksBeforeProcessingTouches--;
-
-            return;
-        }
 
         _stage.act(Gdx.graphics.getDeltaTime());
 
