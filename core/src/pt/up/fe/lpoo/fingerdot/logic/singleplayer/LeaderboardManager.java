@@ -128,6 +128,10 @@ public class LeaderboardManager {
         return _onlineLeaderboard;
     }
 
+    public ArrayList<LeaderboardEntry> getLocalLeaderboard() {
+        return _localLeaderboard;
+    }
+
     public static boolean publishScoreOnOnlineLeaderboard(LeaderboardEntry entry) {
         try {
             URL lbURL = new URL(kPostScoreURL + "?username=" + entry.username + "&score=" + entry.score + "&version=" + entry.version);
