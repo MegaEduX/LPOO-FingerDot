@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
@@ -47,7 +48,7 @@ public class MainMenuScreen implements Screen {
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setCatchMenuKey(true);
 
-        _stage = new Stage(new ScreenViewport(FingerDot.getSharedInstance().camera));
+        _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
 
         _skin = new Skin(Gdx.files.internal("uiskin.json"));
 

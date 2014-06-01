@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
@@ -27,6 +28,10 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
     private Stage _stage = null;
 
+    private boolean _needsRedraw = false;
+
+    private String _currentMessage = "Connecting to server...";
+
     public MultiPlayerMatchmakingScreen() {
         _msg = new MultiPlayerMessenger();
 
@@ -36,7 +41,7 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
         Gdx.input.setCatchBackKey(true);
 
-        _stage = new Stage(new ScreenViewport(FingerDot.getSharedInstance().camera));
+        _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
         Gdx.input.setInputProcessor(_stage);
 
         drawStage();
@@ -53,11 +58,9 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
         Label.LabelStyle fontStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        String labelText = "Searching for a suitable opponent...";
+        BitmapFont.TextBounds bounds = font.getBounds(_currentMessage);
 
-        BitmapFont.TextBounds bounds = font.getBounds(labelText);
-
-        table.add(new Label(labelText, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
+        table.add(new Label(_currentMessage, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
 
         table.row();
 
@@ -86,11 +89,20 @@ public class MultiPlayerMatchmakingScreen implements Screen {
         _stage.addActor(table);
     }
 
+    public void setCurrentMessage(String message) {
+        _currentMessage = message;
+
+        _needsRedraw = true;
+    }
+
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (_needsRedraw)
+            drawStage();
 
         _stage.draw();
     }

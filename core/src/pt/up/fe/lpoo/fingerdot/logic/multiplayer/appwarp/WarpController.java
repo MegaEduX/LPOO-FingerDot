@@ -110,6 +110,8 @@ public class WarpController {
 			isConnected = false;
 			handleError();
 		}
+
+        warpListener.onConnectDone(status);
 	}
 	
 	public void onDisconnectDone(boolean status){

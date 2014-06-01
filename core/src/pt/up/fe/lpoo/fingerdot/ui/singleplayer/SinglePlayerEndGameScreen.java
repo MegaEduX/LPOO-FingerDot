@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
@@ -40,7 +41,8 @@ public class SinglePlayerEndGameScreen implements Screen {
 
         Gdx.input.setCatchBackKey(true);
 
-        _stage = new Stage(new ScreenViewport(FingerDot.getSharedInstance().camera));
+        _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+
         Gdx.input.setInputProcessor(_stage);
 
         drawStage();

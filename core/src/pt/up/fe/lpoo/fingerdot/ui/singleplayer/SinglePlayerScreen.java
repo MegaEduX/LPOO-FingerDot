@@ -16,15 +16,15 @@ import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
  */
 
 public class SinglePlayerScreen implements Screen {
-    final FingerDot _game = FingerDot.getSharedInstance();
+    private final FingerDot _game = FingerDot.getSharedInstance();
 
-    boolean _isTouching = false;
+    private boolean _isTouching = false;
 
-    boolean _paused = false;
+    private boolean _paused = false;
 
-    SinglePlayerController _controller;
+    private SinglePlayerController _controller;
 
-    Texture _pausedTexture;
+    private Texture _pausedTexture;
 
     public SinglePlayerScreen() {
         _controller = new SinglePlayerController(1, 3);
@@ -71,6 +71,8 @@ public class SinglePlayerScreen implements Screen {
                 x *= _game.camera.viewportWidth / Gdx.graphics.getWidth();
                 y *= _game.camera.viewportHeight / Gdx.graphics.getHeight();
             }
+
+            System.out.println("Camera width: " + _game.camera.viewportWidth);
 
             System.out.println("Real X: " + Gdx.input.getX() + ". Computed X: " + x);
             System.out.println("Real Y: " + Gdx.input.getY() + ". Computed Y: " + y);

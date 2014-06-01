@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
@@ -36,7 +37,8 @@ public class LeaderboardScreen implements Screen {
     public LeaderboardScreen() {
         Gdx.input.setCatchBackKey(true);
 
-        _stage = new Stage(new ScreenViewport(FingerDot.getSharedInstance().camera));
+        _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+
         Gdx.input.setInputProcessor(_stage);
 
         drawStage();
@@ -143,7 +145,7 @@ public class LeaderboardScreen implements Screen {
         });
 
         optTable.setX(335);
-        optTable.setY(525);
+        optTable.setY(600);
 
         _stage.addActor(optTable);
 
@@ -163,7 +165,7 @@ public class LeaderboardScreen implements Screen {
         });
 
         backTable.setX(150);
-        backTable.setY(575);
+        backTable.setY(650);
 
         _stage.addActor(backTable);
     }

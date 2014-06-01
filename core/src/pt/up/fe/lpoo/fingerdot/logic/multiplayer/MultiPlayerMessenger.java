@@ -126,6 +126,13 @@ public class MultiPlayerMessenger implements WarpListener {
         _mpmScreen.startGame();
     }
 
+    public void onConnectDone(boolean status) {
+        if (status)
+            _mpmScreen.setCurrentMessage("Searching for a suitable opponent...");
+        else
+            _mpmScreen.setCurrentMessage("Connection failed! Please try again later.");
+    }
+
     public void onError(String message) {
 
     }
