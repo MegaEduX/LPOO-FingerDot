@@ -2,6 +2,7 @@ package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -105,6 +106,12 @@ public class MultiPlayerMatchmakingScreen implements Screen {
             drawStage();
 
         _stage.draw();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            FingerDot.getSharedInstance().setScreen(new MainMenuScreen());
+
+            dispose();
+        }
     }
 
     public void startGame() {
