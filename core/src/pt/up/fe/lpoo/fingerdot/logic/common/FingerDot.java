@@ -20,6 +20,8 @@ public class FingerDot extends Game {
     public BitmapFont font;
     public OrthographicCamera camera;
 
+    public final String version = "0.1-alpha";
+
     private static FingerDot _sharedInstance;
 
     public static FingerDot getSharedInstance() {

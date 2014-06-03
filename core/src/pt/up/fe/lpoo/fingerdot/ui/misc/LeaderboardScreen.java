@@ -64,7 +64,10 @@ public class LeaderboardScreen implements Screen {
 
         hsTable.add(new Label("#", fontStyle)).width(50).height(kTableHeightHeader);
 
-        hsTable.add(new Label("Nickname", fontStyle)).width(500).height(kTableHeightHeader);
+        if (_showOnline)
+            hsTable.add(new Label("Nickname", fontStyle)).width(500).height(kTableHeightHeader);
+        else
+            hsTable.add(new Label("Date & Time", fontStyle)).width(500).height(kTableHeightHeader);
 
         hsTable.add(new Label("Score", fontStyle)).width(300).height(kTableHeightHeader);
 

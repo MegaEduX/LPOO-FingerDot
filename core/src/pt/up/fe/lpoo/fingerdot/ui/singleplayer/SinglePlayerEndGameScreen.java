@@ -22,7 +22,9 @@ import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 
+import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -70,7 +72,7 @@ public class SinglePlayerEndGameScreen implements Screen {
 
         table.row();
 
-        String scoreString = "Score: " + _finalScore;
+        final String scoreString = "Score: " + _finalScore;
 
         bounds = font.getBounds(scoreString);
 
@@ -88,11 +90,13 @@ public class SinglePlayerEndGameScreen implements Screen {
         highScoreButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                String readableDate = DateFormat.getDateTimeInstance().format(new Date(0));
+                String timeInMillis = String.valueOf(Calendar.getInstance().getTimeInMillis());
+                String version = FingerDot.getSharedInstance().version;
 
-                /*  LeaderboardEntry entry = new LeaderboardEntry("n", Calendar.getInstance().getTimeInMillis())
-                LeaderboardManager.sharedManager().addLocalScore(); */
+                LeaderboardEntry entry = new LeaderboardEntry(readableDate, timeInMillis, version, _finalScore);
 
-                //  needs work
+                LeaderboardManager.sharedManager().addLocalScore(entry);
             }
         });
 

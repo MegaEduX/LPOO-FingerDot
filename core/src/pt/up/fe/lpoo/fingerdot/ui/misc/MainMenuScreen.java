@@ -42,7 +42,11 @@ public class MainMenuScreen implements Screen {
     private Skin _skin = null;
     private Stage _stage = null;
 
+    private final MainMenuScreen self;
+
     public MainMenuScreen() {
+        self = this;
+
         _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
 
         Gdx.input.setCatchBackKey(true);
@@ -71,15 +75,14 @@ public class MainMenuScreen implements Screen {
 
         TextButton singlePlayer = new TextButton("Singleplayer", _skin);
 
-        //  singlePlayer.getLabel().setStyle(font); not this but near
         table.add(singlePlayer).width(kButtonWidth).height(kButtonHeight).padBottom(20);
         table.row();
 
-        TextButton multiPlayer = new TextButton("Multiplayer",_skin);
+        TextButton multiPlayer = new TextButton("Multiplayer", _skin);
         table.add(multiPlayer).width(kButtonWidth).height(kButtonHeight).padBottom(20);
         table.row();
 
-        TextButton leaderBoard = new TextButton("Leaderboard",_skin);
+        TextButton leaderBoard = new TextButton("Leaderboard", _skin);
         table.add(leaderBoard).width(kButtonWidth).height(kButtonHeight);
         table.row();
 
@@ -109,6 +112,8 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _game.setScreen(new LeaderboardScreen());
+
+                //  _game.setScreen(new UserNameSelectionScreen(self));
 
                 dispose();
             };
@@ -155,7 +160,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
-
+        Gdx.input.setInputProcessor(_stage);
     }
 
     @Override public void hide() {
