@@ -118,6 +118,8 @@ public class MultiPlayerMatchmakingScreen implements Screen {
         System.out.println("Starting MP Game...");
 
         FingerDot.getSharedInstance().setScreen(new MultiPlayerScreen(_msg));
+
+        dispose();
     }
 
     public void abortMatchmaking() {
