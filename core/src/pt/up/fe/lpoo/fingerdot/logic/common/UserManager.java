@@ -133,6 +133,8 @@ public class UserManager {
 
                 return false;
             } catch (Exception e) {
+                System.out.println("Exception: " + e);
+
                 return false;
             } finally {
                 connection.disconnect();

@@ -50,11 +50,11 @@ public class MultiPlayerScreen implements Screen {
         if (_controller.getLives() <= 0) {
             _mpMessenger.broadcastLoss();
 
-            _controller.setGameState(false);
+            _controller.setGameState(MultiPlayerController.GameState.GameStateLost);
         }
 
-        if (!_controller.getGameState()) {
-            _game.setScreen(new MultiPlayerEndGameScreen());
+        if (_controller.getGameState() != MultiPlayerController.GameState.GameStatePlaying) {
+            _game.setScreen(new MultiPlayerEndGameScreen(_controller.getGameState()));
 
             dispose();
 

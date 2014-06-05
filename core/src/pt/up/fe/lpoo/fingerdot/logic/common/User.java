@@ -1,9 +1,12 @@
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
+import java.io.Serializable;
+
 /**
  * Created by MegaEduX on 03/06/14.
  */
-public class User {
+
+public class User implements Serializable {
     private String _username = null;
     private String _pin = null;
 

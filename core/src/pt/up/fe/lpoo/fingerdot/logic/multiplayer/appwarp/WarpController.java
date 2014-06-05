@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
+import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 
 public class WarpController {
 
@@ -17,26 +18,25 @@ public class WarpController {
 	
 	private WarpClient warpClient;
 	
-	private String localUser;
-	private String roomId;
+	private String _localUser;
+	private String _roomId;
 	
-	private boolean isConnected = false;
-	boolean isUDPEnabled = false;
+	private boolean _connected = false;
 	
 	private WarpListener warpListener;
 	
 	private int STATE;
 	
 	// Game state constants
-	public static final int WAITING = 1;
-	public static final int STARTED = 2;
-	public static final int COMPLETED = 3;
-	public static final int FINISHED = 4;
+	public static final int kWaitingForPlayers = 1;
+	public static final int kGameStarted = 2;
+	public static final int kGameComplete = 3;
+	public static final int kGameFinished = 4;
 	
 	// Game completed constants
-	public static final int GAME_WIN = 5;
-	public static final int GAME_LOOSE = 6;
-	public static final int ENEMY_LEFT = 7;
+	public static final int kGameCompleteWon = 5;
+	public static final int kGameCompleteLost = 6;
+	public static final int kGameCompleteEnemyLeft = 7;
 
     public boolean isRoomOwner = false;
 	
@@ -64,7 +64,7 @@ public class WarpController {
 	}
 	
 	public void startAppWarp(String localUser) {
-		this.localUser = localUser;
+		this._localUser = localUser;
 		warpClient.connectWithUserName(localUser);
 	}
 	
@@ -73,27 +73,22 @@ public class WarpController {
 	}
 	
 	public void stopAppWarp() {
-		if (isConnected) {
-			warpClient.unsubscribeRoom(roomId);
-			warpClient.leaveRoom(roomId);
+		if (_connected) {
+			warpClient.unsubscribeRoom(_roomId);
+			warpClient.leaveRoom(_roomId);
 		}
 
 		warpClient.disconnect();
 	}
 	
 	public void sendGameUpdate(String msg){
-		if (isConnected) {
-			if (isUDPEnabled) {
-				warpClient.sendUDPUpdatePeers((localUser+"#@"+msg).getBytes());
-			} else {
-				warpClient.sendUpdatePeers((localUser+"#@"+msg).getBytes());
-			}
-		}
+		if (_connected)
+		    warpClient.sendUpdatePeers((_localUser + "#@" + msg).getBytes());
 	}
 	
 	public void updateResult(int code, String msg){
-		if (isConnected) {
-			STATE = COMPLETED;
+		if (_connected) {
+			STATE = kGameComplete;
 			HashMap<String, Object> properties = new HashMap<String, Object>();
 			properties.put("result", code);
 			warpClient.lockProperties(properties);
@@ -103,11 +98,10 @@ public class WarpController {
 	public void onConnectDone(boolean status){
 		log("onConnectDone: "+status);
 
-		if (status) {
-			//  warpClient.initUDP();
+		if (status)
 			warpClient.joinRoomInRange(1, 1, false);
-		} else {
-			isConnected = false;
+		else {
+			_connected = false;
 			handleError();
 		}
 
@@ -130,12 +124,12 @@ public class WarpController {
 		log("onJoinRoomDone: "+event.getResult());
 
 		if (event.getResult() == WarpResponseResultCode.SUCCESS) { // success case
-			this.roomId = event.getData().getId();
-			warpClient.subscribeRoom(roomId);
+			this._roomId = event.getData().getId();
+			warpClient.subscribeRoom(_roomId);
 		} else if (event.getResult()==WarpResponseResultCode.RESOURCE_NOT_FOUND) {// no such room found
 			HashMap<String, Object> data = new HashMap<String, Object>();
 			data.put("result", "");
-			warpClient.createRoom("gt", localUser, 2, data);
+			warpClient.createRoom(UserManager.sharedManager().getUser().getUsername(), _localUser, 2, data);
 
             isRoomOwner = true;
 		} else {
@@ -148,7 +142,7 @@ public class WarpController {
 		log("onSubscribeRoomDone: " + roomId);
 
 		if (roomId != null) {
-			isConnected = true;
+			_connected = true;
 			warpClient.getLiveRoomInfo(roomId);
 		} else {
 			warpClient.disconnect();
@@ -180,7 +174,7 @@ public class WarpController {
 		 * if room id is same and username is different then start the game
 		 */
 
-		if (localUser.equals(userName) == false) {
+		if (_localUser.equals(userName) == false) {
 			startGame();
 		}
 	}
@@ -195,13 +189,13 @@ public class WarpController {
 		String userName = message.substring(0, message.indexOf("#@"));
 		String data = message.substring(message.indexOf("#@") + 2, message.length());
 
-		if (!localUser.equals(userName) || data.contains("{\"_gd\":[{"))
+		if (!_localUser.equals(userName) || data.contains("{\"_gd\":[{"))
 			warpListener.onGameUpdateReceived(data);
 	}
 	
 	public void onResultUpdateReceived(String userName, int code){
-		if (localUser.equals(userName) == false) {
-			STATE = FINISHED;
+		if (_localUser.equals(userName) == false) {
+			STATE = kGameFinished;
 			warpListener.onGameFinished(code, true);
 		} else {
 			warpListener.onGameFinished(code, false);
@@ -211,8 +205,8 @@ public class WarpController {
 	public void onUserLeftRoom(String roomId, String userName){
 		log("onUserLeftRoom "+userName+" in room "+roomId);
 
-		if (STATE == STARTED && !localUser.equals(userName)) { // Game Started and other user left the room
-			warpListener.onGameFinished(ENEMY_LEFT, true);
+		if (STATE == kGameStarted && !_localUser.equals(userName)) { // Game Started and other user left the room
+			warpListener.onGameFinished(kGameCompleteEnemyLeft, true);
 		}
 	}
 	
@@ -227,30 +221,30 @@ public class WarpController {
 	}
 	
 	private void startGame() {
-		STATE = STARTED;
+		STATE = kGameStarted;
 		warpListener.onGameStarted("Start the Game");
 	}
 	
 	private void waitForOtherUser(){
-		STATE = WAITING;
+		STATE = kWaitingForPlayers;
 		warpListener.onWaitingStarted("Waiting for other user");
 	}
 	
 	private void handleError(){
-		if (roomId != null && roomId.length() > 0) {
-			warpClient.deleteRoom(roomId);
+		if (_roomId != null && _roomId.length() > 0) {
+			warpClient.deleteRoom(_roomId);
 		}
 
 		disconnect();
 	}
 	
 	public void handleLeave(){
-		if (isConnected) {
-			warpClient.unsubscribeRoom(roomId);
-			warpClient.leaveRoom(roomId);
+		if (_connected) {
+			warpClient.unsubscribeRoom(_roomId);
+			warpClient.leaveRoom(_roomId);
 
-			if (STATE != STARTED){
-				warpClient.deleteRoom(roomId);
+			if (STATE != kGameStarted){
+				warpClient.deleteRoom(_roomId);
 			}
 
 			warpClient.disconnect();

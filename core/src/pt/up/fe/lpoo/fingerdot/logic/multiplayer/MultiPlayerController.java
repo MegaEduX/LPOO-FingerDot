@@ -15,7 +15,9 @@ import java.util.Iterator;
  */
 
 public class MultiPlayerController extends SinglePlayerController {
-    private boolean _gameState = true;
+    public enum GameState {GameStatePlaying, GameStateWon, GameStateLost, GameStateTie}
+
+    private GameState _gameState = GameState.GameStatePlaying;
 
     protected int _opponentScore;
     protected int _opponentLives;
@@ -51,11 +53,11 @@ public class MultiPlayerController extends SinglePlayerController {
         _dots = list;
     }
 
-    public void setGameState(boolean ended) {
-        _gameState = ended;
+    public void setGameState(GameState state) {
+        _gameState = state;
     }
 
-    public boolean getGameState() {
+    public GameState getGameState() {
         return _gameState;
     }
 
@@ -64,13 +66,13 @@ public class MultiPlayerController extends SinglePlayerController {
     }
 
     @Override public void performTick() {
-        if (_lives <= 0 || _dots == null || !_gameState)
+        if (_lives <= 0 || _dots == null || _gameState != GameState.GameStatePlaying)
             return;
 
-        if (_dots.size() == 0 && _gameState) {   //  The game has ended, but not marked as so yet.
-            _mpMessenger.broadcastEndOfGame(_score);
+        if (_dots.size() == 0 && _gameState == GameState.GameStatePlaying) {   //  The game has ended, but not marked as so yet.
+            _mpMessenger.broadcastEndOfGame(_score, 0, GameState.GameStateTie);
 
-            _gameState = false;
+            _gameState = GameState.GameStateTie;
 
             return;
         }

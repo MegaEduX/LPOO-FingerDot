@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 import pt.up.fe.lpoo.fingerdot.ui.singleplayer.SinglePlayerScreen;
@@ -42,10 +43,10 @@ public class MainMenuScreen implements Screen {
     private Skin _skin = null;
     private Stage _stage = null;
 
-    private final MainMenuScreen self;
+    //  private final MainMenuScreen self;
 
     public MainMenuScreen() {
-        self = this;
+        //  self = this;
 
         _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
 
@@ -102,7 +103,10 @@ public class MainMenuScreen implements Screen {
         multiPlayer.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                _game.setScreen(new MultiPlayerMatchmakingScreen());
+                if (UserManager.sharedManager().getUser() == null)
+                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
+                else
+                    _game.setScreen(new MultiPlayerMatchmakingScreen());
 
                 dispose();
             };
@@ -112,8 +116,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 _game.setScreen(new LeaderboardScreen());
-
-                //  _game.setScreen(new UserNameSelectionScreen(self));
 
                 dispose();
             };

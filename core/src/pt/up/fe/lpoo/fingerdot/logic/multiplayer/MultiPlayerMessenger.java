@@ -12,6 +12,7 @@ import com.shephertz.app42.gaming.multiplayer.client.WarpClient;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
+import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.*;
 
 import org.json.JSONObject;
@@ -24,10 +25,29 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class MultiPlayerMessenger implements WarpListener {
+    private class GameOverMessage {
+        public boolean gameOver;
+
+        public int points;
+        public int dotsLeft;
+
+        public MultiPlayerController.GameState expectedGameState;
+
+        public GameOverMessage(int p, int d, MultiPlayerController.GameState g) {
+            gameOver = true;
+
+            points = p;
+            dotsLeft = d;
+            expectedGameState = g;
+        }
+    }
+
     private MultiPlayerScreen _mpScreen = null;
     private MultiPlayerMatchmakingScreen _mpmScreen = null;
 
     private GameBuilder _gameBuilder = null;
+
+    private Gson _gson = null;
 
     private static String AppWarpAppKey = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     private static String AppWarpSecretKey = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
@@ -41,9 +61,9 @@ public class MultiPlayerMessenger implements WarpListener {
 
         WarpController.getInstance().setListener(this);
 
-        Random rand = new Random();
+        _gson = new Gson();
 
-        String username = "username" + rand.nextInt(5000) + 10;
+        String username = UserManager.sharedManager().getUser().getUsername();
 
         System.out.println("Initializing with username \"" + username + "\"...");
 
@@ -89,14 +109,13 @@ public class MultiPlayerMessenger implements WarpListener {
         }
     }
 
-    public void broadcastEndOfGame(int score) {
+
+
+    public void broadcastEndOfGame(int score, int dotsLeft, MultiPlayerController.GameState expectedState) {
         try {
-            JSONObject data = new JSONObject();
+            GameOverMessage message = new GameOverMessage(score, dotsLeft, expectedState);
 
-            data.put("gameOver", "endOfGame");
-            data.put("points", score);
-
-            WarpController.getInstance().sendGameUpdate(data.toString());
+            WarpController.getInstance().sendGameUpdate(_gson.toJson(message));
         } catch (Exception e) {
 
         }
@@ -110,9 +129,7 @@ public class MultiPlayerMessenger implements WarpListener {
 
             for (int i = 0; i < messages; i++) {
                 try {
-                    Gson gs = new Gson();
-
-                    String gameStr = gs.toJson(GameGenerator.generateGamePartWithDots(kMaxDotsPerChatMessage, i, messages));
+                    String gameStr = _gson.toJson(GameGenerator.generateGamePartWithDots(kMaxDotsPerChatMessage, i, messages));
 
                     System.out.println("Sending dots info: " + gameStr);
 
@@ -161,11 +178,9 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 System.out.println("Got dots info! This, to be exact: " + data.getString("_gd"));
 
-                Gson gs = new Gson();
-
                 Type gameGeneratorPartType = new TypeToken<GameGeneratorPart>(){}.getType();
 
-                GameGeneratorPart d = gs.fromJson(data.toString(), gameGeneratorPartType);
+                GameGeneratorPart d = _gson.fromJson(data.toString(), gameGeneratorPartType);
 
                 if (_gameBuilder == null)
                     _gameBuilder = new GameBuilder(this);
@@ -189,13 +204,29 @@ public class MultiPlayerMessenger implements WarpListener {
 
                 //  Points somewhere!
             } else if (message.contains("{\"gameOver\"")) {
-                _mpScreen.getController().setGameState(false);
-                //  _mpScreen.getController().set
+                Type gameOverMessageType = new TypeToken<GameOverMessage>(){}.getType();
+
+                GameOverMessage gom = _gson.fromJson(data.toString(), gameOverMessageType);
+
+                switch (gom.expectedGameState) {
+                    case GameStateLost:
+                        _mpScreen.getController().setGameState(MultiPlayerController.GameState.GameStateWon);
+
+                        break;
+
+                    case GameStateTie:
+                        _mpScreen.getController().setGameState(MultiPlayerController.GameState.GameStateTie);
+
+                        break;
+
+                    default:
+                        throw new Exception("Invalid Game Type!");
+                }
             } else {
-                //  Unknown message? :o
+                throw new Exception("Unknown Message Received!");
             }
         } catch (Exception e) {
-            // exception
+            System.out.println("Exception at onGameUpdateReceived: " + e);
         }
     }
 }

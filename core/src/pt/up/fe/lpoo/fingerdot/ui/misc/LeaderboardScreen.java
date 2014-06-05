@@ -87,6 +87,9 @@ public class LeaderboardScreen implements Screen {
                     hsTable.row();
 
                     posCounter++;
+
+                    if (posCounter >= 10)
+                        break;
                 }
             }
         } else {
@@ -99,11 +102,14 @@ public class LeaderboardScreen implements Screen {
                     hsTable.row();
 
                     posCounter++;
+
+                    if (posCounter >= 10)
+                        break;
                 }
             }
         }
 
-        while (posCounter != 10) {
+        while (posCounter < 10) {
             hsTable.add(new Label(Integer.toString(posCounter), fontStyle)).width(50).height(kTableHeightNormal);
             hsTable.add(new Label("???", fontStyle)).width(500).height(kTableHeightNormal);
             hsTable.add(new Label("0", fontStyle)).width(300).height(kTableHeightNormal);
@@ -174,6 +180,9 @@ public class LeaderboardScreen implements Screen {
     }
 
     @Override public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         _stage.act(Gdx.graphics.getDeltaTime());
