@@ -53,6 +53,10 @@ public class UserManager {
         }
     }
 
+    public User getUser() {
+        return _user;
+    }
+
     /*
      *  Code taken from http://stackoverflow.com/questions/6825226/trust-anchor-not-found-for-android-ssl-connection
      */

@@ -86,7 +86,7 @@ public class LeaderboardManager {
 
             return true;
         } catch (Exception e) {
-
+            System.out.println("saveLocalLeaderboard: " + e);
         }
 
         return false;

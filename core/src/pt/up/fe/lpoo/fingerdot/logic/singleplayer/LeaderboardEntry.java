@@ -1,12 +1,14 @@
 package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 
+import java.io.Serializable;
+
 /**
  * fingerdot
  * <p/>
  * Created by MegaEduX on 26/05/14.
  */
 
-public class LeaderboardEntry {
+public class LeaderboardEntry implements Serializable {
     public String username;
     public String timestamp;
     public String version;

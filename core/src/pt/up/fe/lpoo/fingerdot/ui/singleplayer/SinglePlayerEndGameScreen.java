@@ -16,11 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
+import pt.up.fe.lpoo.fingerdot.ui.misc.UserNameSelectionScreen;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -35,11 +37,17 @@ import java.util.TimerTask;
 public class SinglePlayerEndGameScreen implements Screen {
     private final static String kSkinFileName = "uiskin.json";
 
+    private boolean _sentToInternetLeaderboards = false;
+
     private Stage _stage = null;
+
+    private final SinglePlayerEndGameScreen self;
 
     int _finalScore = 0;
 
     public SinglePlayerEndGameScreen(int finalScore) {
+        self = this;
+
         _finalScore = finalScore;
 
         Gdx.input.setCatchBackKey(true);
@@ -87,16 +95,26 @@ public class SinglePlayerEndGameScreen implements Screen {
 
         table.row();
 
+        final String readableDate = DateFormat.getDateTimeInstance().format(new Date());
+        final String timeInMillis = String.valueOf(Calendar.getInstance().getTimeInMillis());
+        final String version = FingerDot.getSharedInstance().version;
+
+        final LeaderboardEntry localEntry = new LeaderboardEntry(readableDate, timeInMillis, version, _finalScore);
+
+        LeaderboardManager.sharedManager().addLocalScore(localEntry);
+
         highScoreButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String readableDate = DateFormat.getDateTimeInstance().format(new Date(0));
-                String timeInMillis = String.valueOf(Calendar.getInstance().getTimeInMillis());
-                String version = FingerDot.getSharedInstance().version;
+                if (UserManager.sharedManager().getUser() == null) {
+                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(self));
+                } else if (!_sentToInternetLeaderboards) {
+                    LeaderboardEntry remoteEntry = new LeaderboardEntry(UserManager.sharedManager().getUser().getUsername(), timeInMillis, version, _finalScore);
 
-                LeaderboardEntry entry = new LeaderboardEntry(readableDate, timeInMillis, version, _finalScore);
+                    LeaderboardManager.sharedManager().publishScoreOnOnlineLeaderboard(remoteEntry);
 
-                LeaderboardManager.sharedManager().addLocalScore(entry);
+                    _sentToInternetLeaderboards = true;
+                }
             }
         });
 
