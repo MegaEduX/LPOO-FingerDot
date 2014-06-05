@@ -62,3 +62,7 @@ build/
 ## OS X
 
 .DS_Store
+
+## FingerDot
+
+android/assets/local_highscores.fdh
