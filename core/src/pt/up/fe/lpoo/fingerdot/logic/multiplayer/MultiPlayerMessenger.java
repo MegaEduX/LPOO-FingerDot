@@ -63,7 +63,11 @@ public class MultiPlayerMessenger implements WarpListener {
 
         _gson = new Gson();
 
-        String username = UserManager.sharedManager().getUser().getUsername();
+        //  String username = UserManager.sharedManager().getUser().getUsername();
+
+        Random rand = new Random();
+
+        String username = "username" + rand.nextInt(5000) + 10;
 
         System.out.println("Initializing with username \"" + username + "\"...");
 
@@ -97,7 +101,7 @@ public class MultiPlayerMessenger implements WarpListener {
         }
     }
 
-    public void broadcastLoss() {
+    /*  public void broadcastLoss() {
         try {
             JSONObject data = new JSONObject();
 
@@ -107,9 +111,7 @@ public class MultiPlayerMessenger implements WarpListener {
         } catch (Exception e) {
 
         }
-    }
-
-
+    }   */
 
     public void broadcastEndOfGame(int score, int dotsLeft, MultiPlayerController.GameState expectedState) {
         try {

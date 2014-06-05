@@ -29,7 +29,7 @@ public class GameGenerator {
         ArrayList<Dot> ret = new ArrayList<Dot>();
 
         for (int i = 0; i < dotsNumber; i++) {
-            Dot dot = new Dot(rng.nextInt((int) game.camera.viewportWidth), rng.nextInt((int) game.camera.viewportHeight), rng.nextInt(75) + (50 / level + 10));
+            Dot dot = new Dot(rng.nextInt((int) game.camera.viewportWidth), rng.nextInt((int) game.camera.viewportHeight - 120) + 120, rng.nextInt(75) + (50 / level + 10));
 
             toAdvance--;
 

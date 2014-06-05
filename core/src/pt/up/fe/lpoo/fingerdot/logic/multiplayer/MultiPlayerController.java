@@ -181,4 +181,8 @@ public class MultiPlayerController extends SinglePlayerController {
 
         return ret;
     }
+
+    public int dotsLeftCount() {
+        return _dots.size();
+    }
 }

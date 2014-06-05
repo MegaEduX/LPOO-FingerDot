@@ -31,6 +31,8 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
     private boolean _needsRedraw = false;
 
+    private boolean _startGameOnNextRun = false;
+
     private String _currentMessage = "Connecting to server...";
 
     public MultiPlayerMatchmakingScreen() {
@@ -112,14 +114,18 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
             dispose();
         }
+
+        if (_startGameOnNextRun) {
+            System.out.println("Starting MP Game...");
+
+            FingerDot.getSharedInstance().setScreen(new MultiPlayerScreen(_msg));
+
+            dispose();
+        }
     }
 
     public void startGame() {
-        System.out.println("Starting MP Game...");
-
-        FingerDot.getSharedInstance().setScreen(new MultiPlayerScreen(_msg));
-
-        dispose();
+        _startGameOnNextRun = true;
     }
 
     public void abortMatchmaking() {
@@ -143,7 +149,7 @@ public class MultiPlayerMatchmakingScreen implements Screen {
     }
 
     @Override public void resize(int x, int y) {
-
+        _stage.getViewport().update(x, y, false);
     }
 
     @Override public void dispose() {

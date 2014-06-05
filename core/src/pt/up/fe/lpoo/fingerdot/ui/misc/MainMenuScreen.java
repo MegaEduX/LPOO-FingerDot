@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
@@ -43,31 +45,24 @@ public class MainMenuScreen implements Screen {
     private Skin _skin = null;
     private Stage _stage = null;
 
-    //  private final MainMenuScreen self;
-
     public MainMenuScreen() {
-        //  self = this;
+        drawScene();
+    }
 
-        _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
+    private void drawScene() {
+        if (_menuTexture == null)
+            _menuTexture = new Texture(Gdx.files.internal("main_menu_bg.png"));
 
         Gdx.input.setCatchBackKey(true);
         Gdx.input.setCatchMenuKey(true);
 
-        _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+        if (_stage == null)
+            _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+        else
+            _stage.clear();
 
-        _skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-        FileHandle fontFile = Gdx.files.internal(kFontFileName);
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-
-        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        param.size = 32;
-
-        BitmapFont font = generator.generateFont(param);
-
-        generator.dispose();
+        if (_skin == null)
+            _skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         Table table = new Table();
         table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight - 200);
@@ -89,8 +84,6 @@ public class MainMenuScreen implements Screen {
 
         _stage.addActor(table);
 
-        //onClick Events
-
         singlePlayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -103,6 +96,9 @@ public class MainMenuScreen implements Screen {
         multiPlayer.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if (!UserManager.sharedManager().internetIsReachable())
+                    return;
+
                 if (UserManager.sharedManager().getUser() == null)
                     FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
                 else
@@ -141,6 +137,22 @@ public class MainMenuScreen implements Screen {
         });
 
         _stage.addActor(fbLikeButton);
+
+        BitmapFont font = FontGenerator.generateBitmapFont(16);
+
+        String loggedInMessage = (UserManager.sharedManager().getUser() != null ? "Logged in as " + UserManager.sharedManager().getUser().getUsername() + "." : "Not logged in.");
+
+        if (!UserManager.sharedManager().internetIsReachable())
+            loggedInMessage = "Not connected to the internet. Network functions disabled.";
+
+        Label.LabelStyle fontStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        Label lbl = new Label(loggedInMessage, fontStyle);
+
+        lbl.setX(25);
+        lbl.setY(25);
+
+        _stage.addActor(lbl);
     }
 
     @Override public void render(float delta) {
@@ -162,7 +174,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
-        Gdx.input.setInputProcessor(_stage);
+
     }
 
     @Override public void hide() {
@@ -178,7 +190,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void resize(int x, int y) {
-
+        _stage.getViewport().update(x, y, false);
     }
 
     @Override public void dispose() {

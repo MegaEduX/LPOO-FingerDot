@@ -8,7 +8,6 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 
 public class WarpController {
-
 	private static WarpController instance;
 	
 	private boolean showLog = true;

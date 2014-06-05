@@ -26,6 +26,10 @@ public class Dot {
         return Math.pow((x - _x), 2) + Math.pow((y - _y), 2) < Math.pow(_radius, 2);
     }
 
+    public boolean validate() {
+        return (_y - _radius > 150);
+    }
+
     public int getX() {
         return _x;
     }

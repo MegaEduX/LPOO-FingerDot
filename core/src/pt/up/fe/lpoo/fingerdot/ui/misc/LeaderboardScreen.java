@@ -209,7 +209,7 @@ public class LeaderboardScreen implements Screen {
     }
 
     @Override public void resize(int x, int y) {
-
+        _stage.getViewport().update(x, y, false);
     }
 
     @Override public void dispose() {

@@ -33,12 +33,8 @@ public class SinglePlayerController {
 
     protected boolean _paused;
 
-    private SinglePlayerController() {  //  This can't be executed anyway, just silencing something.
-
-    }
-
     public SinglePlayerController(int level, int lives) {
-        _lives = lives + 1;
+        _lives = lives;
         _level = level;
 
         _score = 0;
@@ -59,6 +55,9 @@ public class SinglePlayerController {
             _tickCounter--;
         else {
             Dot dot = new Dot(_rng.nextInt((int) _game.camera.viewportWidth), _rng.nextInt((int) _game.camera.viewportHeight), _rng.nextInt(75) + (50 / _level + 10));
+
+            while (!dot.validate())
+                dot = new Dot(_rng.nextInt((int) _game.camera.viewportWidth), _rng.nextInt((int) _game.camera.viewportHeight), _rng.nextInt(75) + (50 / _level + 10));
 
             _dotsOnPlay.add(dot);
 

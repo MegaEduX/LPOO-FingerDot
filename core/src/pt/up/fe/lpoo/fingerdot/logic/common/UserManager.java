@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
+import java.net.InetAddress;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -66,6 +67,16 @@ public class UserManager {
             return true;
         }
     };
+
+    public boolean internetIsReachable() {
+        try {
+            InetAddress address = InetAddress.getByName("edr.io");
+
+            return address.isReachable(3000);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     private static void trustAllHosts() {
         TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
