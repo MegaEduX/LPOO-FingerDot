@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.ui.singleplayer;
 
 import com.badlogic.gdx.Gdx;
@@ -19,12 +26,6 @@ import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
-
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 03/05/14.
- */
 
 public class SinglePlayerScreen implements Screen {
     private final FingerDot _game = FingerDot.getSharedInstance();

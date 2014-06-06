@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
 import com.badlogic.gdx.Application;
@@ -14,16 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 
-/**
- * Created by MegaEduX on 21/05/14.
- */
 public class MultiPlayerMatchmakingScreen implements Screen {
     private MultiPlayerMessenger _msg;
 
@@ -90,6 +93,8 @@ public class MultiPlayerMatchmakingScreen implements Screen {
         });
 
         _stage.addActor(table);
+
+        _needsRedraw = false;
     }
 
     public void setCurrentMessage(String message) {

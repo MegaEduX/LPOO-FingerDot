@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
 import com.badlogic.gdx.Game;
@@ -9,11 +16,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
 
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 03/05/14.
- */
 public class FingerDot extends Game {
     public SpriteBatch batch;
     public ShapeRenderer renderer;

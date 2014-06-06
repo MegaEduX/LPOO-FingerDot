@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.ui.misc;
 
 import com.badlogic.gdx.Application;
@@ -15,11 +22,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.User;
 import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
-import pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp.WarpController;
-
-/**
- * Created by MegaEduX on 03/06/14.
- */
 
 public class UserNameSelectionScreen implements Screen {
     private static final String kFontFileName = "hecubus.ttf";

@@ -1,10 +1,13 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
 import java.io.Serializable;
-
-/**
- * Created by MegaEduX on 03/06/14.
- */
 
 public class User implements Serializable {
     private String _username = null;

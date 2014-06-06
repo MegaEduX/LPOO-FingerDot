@@ -1,13 +1,16 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-/**
- * Created by MegaEduX on 27/05/14.
- */
 
 public class GameGeneratorPart implements Serializable {
     ArrayList<Dot> _gd;

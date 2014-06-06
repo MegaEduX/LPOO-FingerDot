@@ -1,12 +1,13 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 
 import java.io.Serializable;
-
-/**
- * fingerdot
- * <p/>
- * Created by MegaEduX on 26/05/14.
- */
 
 public class LeaderboardEntry implements Serializable {
     public String username;

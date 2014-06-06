@@ -1,37 +1,30 @@
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 03/05/14.
- */
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
 
 package pt.up.fe.lpoo.fingerdot.ui.misc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerMatchmakingScreen;
-import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 import pt.up.fe.lpoo.fingerdot.ui.singleplayer.SinglePlayerScreen;
-
-import java.io.FileInputStream;
 
 public class MainMenuScreen implements Screen {
     private static final int kButtonWidth = 400;
@@ -100,7 +93,7 @@ public class MainMenuScreen implements Screen {
                     return;
 
                 if (UserManager.sharedManager().getUser() == null)
-                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
+                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen(), new MultiPlayerMatchmakingScreen()));
                 else
                     _game.setScreen(new MultiPlayerMatchmakingScreen());
 

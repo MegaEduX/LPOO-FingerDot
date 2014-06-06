@@ -1,12 +1,13 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 
 import java.util.Comparator;
-
-/**
- * fingerdot
- * <p/>
- * Created by MegaEduX on 26/05/14.
- */
 
 public class LeaderboardEntryComparator implements Comparator<LeaderboardEntry> {
     public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {

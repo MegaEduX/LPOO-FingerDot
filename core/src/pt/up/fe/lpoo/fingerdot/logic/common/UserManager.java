@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.common;
 
 import com.badlogic.gdx.Application;
@@ -5,7 +12,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
 
 import javax.net.ssl.*;
 import java.io.BufferedReader;
@@ -17,12 +23,7 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.HashMap;
-
-/**
- * Created by MegaEduX on 03/06/14.
- */
 
 public class UserManager {
     private class LoginResponse {

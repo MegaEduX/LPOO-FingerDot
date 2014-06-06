@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
@@ -7,12 +14,6 @@ import pt.up.fe.lpoo.fingerdot.logic.singleplayer.SinglePlayerController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 06/05/14.
- */
 
 public class MultiPlayerController extends SinglePlayerController {
     public enum GameState {GameStatePlaying, GameStateWon, GameStateLost, GameStateTie}

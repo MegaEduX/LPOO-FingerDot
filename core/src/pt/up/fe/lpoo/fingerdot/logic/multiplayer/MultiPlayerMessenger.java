@@ -1,8 +1,9 @@
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 06/05/14.
- */
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
 
 package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
@@ -21,8 +22,6 @@ import pt.up.fe.lpoo.fingerdot.ui.multiplayer.MultiPlayerScreen;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
 
 public class MultiPlayerMessenger implements WarpListener {
     private class GameOverMessage {
@@ -63,11 +62,7 @@ public class MultiPlayerMessenger implements WarpListener {
 
         _gson = new Gson();
 
-        //  String username = UserManager.sharedManager().getUser().getUsername();
-
-        Random rand = new Random();
-
-        String username = "username" + rand.nextInt(5000) + 10;
+        String username = UserManager.sharedManager().getUser().getUsername();
 
         System.out.println("Initializing with username \"" + username + "\"...");
 
@@ -100,18 +95,6 @@ public class MultiPlayerMessenger implements WarpListener {
             // exception in sendLocation
         }
     }
-
-    /*  public void broadcastLoss() {
-        try {
-            JSONObject data = new JSONObject();
-
-            data.put("gameOver", "noLives");
-
-            WarpController.getInstance().sendGameUpdate(data.toString());
-        } catch (Exception e) {
-
-        }
-    }   */
 
     public void broadcastEndOfGame(int score, int dotsLeft, MultiPlayerController.GameState expectedState) {
         try {
@@ -176,7 +159,7 @@ public class MultiPlayerMessenger implements WarpListener {
         try {
             JSONObject data = new JSONObject(message);
 
-            if (message.contains("{\"_gd\":[{\"")) {
+            if (message.contains("\"_gd\":[")) {
                 //  Both devices, not only the one acting as client, should use this data.
                 //  Less lag, more fun? That. :)
 
@@ -190,7 +173,7 @@ public class MultiPlayerMessenger implements WarpListener {
                     _gameBuilder = new GameBuilder(this);
 
                 _gameBuilder.addPart(d);
-            } else if (message.contains("{\"correct\":")) {
+            } else if (message.contains("\"correct\":")) {
                 System.out.println("Got an opponent touch!");
 
                 int x = data.getInt("x");
@@ -207,7 +190,7 @@ public class MultiPlayerMessenger implements WarpListener {
                     _mpScreen.getController().removeOpponentLife();
 
                 //  Points somewhere!
-            } else if (message.contains("{\"gameOver\"")) {
+            } else if (message.contains("\"gameOver\"")) {
                 Type gameOverMessageType = new TypeToken<GameOverMessage>(){}.getType();
 
                 GameOverMessage gom = _gson.fromJson(data.toString(), gameOverMessageType);

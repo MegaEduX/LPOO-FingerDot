@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.multiplayer;
 
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
@@ -5,12 +12,6 @@ import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-/**
- * FingerDot
- * <p/>
- * Created by MegaEduX on 16/05/14.
- */
 
 public class GameGenerator {
     static protected int _baseAdvanceLevel = 20;

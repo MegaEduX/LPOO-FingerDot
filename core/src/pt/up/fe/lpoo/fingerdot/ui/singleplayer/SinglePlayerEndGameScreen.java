@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.ui.singleplayer;
 
 import com.badlogic.gdx.Application;
@@ -14,7 +21,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.UserManager;
 import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
@@ -27,17 +33,13 @@ import pt.up.fe.lpoo.fingerdot.ui.misc.UserNameSelectionScreen;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
-/**
- * Created by MegaEduX on 20/05/14.
- */
 
 public class SinglePlayerEndGameScreen implements Screen {
     private final static String kSkinFileName = "uiskin.json";
 
     private boolean _sentToInternetLeaderboards = false;
+
+    private boolean _needsRedraw = false;
 
     private Stage _stage = null;
 
@@ -90,33 +92,37 @@ public class SinglePlayerEndGameScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal(kSkinFileName));
 
-        TextButton highScoreButton = new TextButton("Submit High Score!", skin);
-        table.add(highScoreButton).width(350).height(75).pad(25);
+        if (!_sentToInternetLeaderboards) {
+            TextButton highScoreButton = new TextButton("Submit High Score!", skin);
+            table.add(highScoreButton).width(350).height(75).pad(25);
 
-        table.row();
+            table.row();
 
-        final String readableDate = DateFormat.getDateTimeInstance().format(new Date());
-        final String timeInMillis = String.valueOf(Calendar.getInstance().getTimeInMillis());
-        final String version = FingerDot.getSharedInstance().version;
+            final String readableDate = DateFormat.getDateTimeInstance().format(new Date());
+            final String timeInMillis = String.valueOf(Calendar.getInstance().getTimeInMillis());
+            final String version = FingerDot.getSharedInstance().version;
 
-        final LeaderboardEntry localEntry = new LeaderboardEntry(readableDate, timeInMillis, version, _finalScore);
+            final LeaderboardEntry localEntry = new LeaderboardEntry(readableDate, timeInMillis, version, _finalScore);
 
-        LeaderboardManager.sharedManager().addLocalScore(localEntry);
+            LeaderboardManager.sharedManager().addLocalScore(localEntry);
 
-        highScoreButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (UserManager.sharedManager().getUser() == null) {
-                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(self, self));
-                } else if (!_sentToInternetLeaderboards) {
-                    LeaderboardEntry remoteEntry = new LeaderboardEntry(UserManager.sharedManager().getUser().getUsername(), timeInMillis, version, _finalScore);
+            highScoreButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (UserManager.sharedManager().getUser() == null) {
+                        FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(self, self));
+                    } else if (!_sentToInternetLeaderboards) {
+                        LeaderboardEntry remoteEntry = new LeaderboardEntry(UserManager.sharedManager().getUser().getUsername(), timeInMillis, version, _finalScore);
 
-                    LeaderboardManager.sharedManager().publishScoreOnOnlineLeaderboard(remoteEntry);
+                        LeaderboardManager.sharedManager().publishScoreOnOnlineLeaderboard(remoteEntry);
 
-                    _sentToInternetLeaderboards = true;
+                        _sentToInternetLeaderboards = true;
+
+                        _needsRedraw = true;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             _stage.addActor(table);
@@ -150,6 +156,9 @@ public class SinglePlayerEndGameScreen implements Screen {
 
             dispose();
         }
+
+        if (_needsRedraw)
+            drawStage();
 
         _stage.draw();
     }

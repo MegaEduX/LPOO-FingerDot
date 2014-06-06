@@ -1,9 +1,14 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.multiplayer.appwarp;
 
 import com.shephertz.app42.gaming.multiplayer.client.command.WarpResponseResultCode;
 import com.shephertz.app42.gaming.multiplayer.client.listener.ChatRequestListener;
-
-
 
 public class ChatListener implements ChatRequestListener{
 	

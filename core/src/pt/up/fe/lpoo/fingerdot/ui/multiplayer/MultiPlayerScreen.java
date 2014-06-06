@@ -1,19 +1,21 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.ui.multiplayer;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import pt.up.fe.lpoo.fingerdot.logic.common.OpponentDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerMessenger;
@@ -21,11 +23,6 @@ import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
 import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import pt.up.fe.lpoo.fingerdot.logic.multiplayer.MultiPlayerController;
 import pt.up.fe.lpoo.fingerdot.ui.misc.FontGenerator;
-import pt.up.fe.lpoo.fingerdot.ui.misc.MainMenuScreen;
-
-/**
- * Created by MegaEduX on 05/05/14.
- */
 
 public class MultiPlayerScreen implements Screen {
     private final FingerDot _game = FingerDot.getSharedInstance();

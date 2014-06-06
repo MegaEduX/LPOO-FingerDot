@@ -1,10 +1,11 @@
-package pt.up.fe.lpoo.fingerdot.logic.common;
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
 
-/**
- * FingerDot
- *
- * Created by MegaEduX on 02/05/14.
- */
+package pt.up.fe.lpoo.fingerdot.logic.common;
 
 public class Dot {
     protected int _x;

@@ -1,11 +1,16 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import pt.up.fe.lpoo.fingerdot.logic.multiplayer.GameGeneratorPart;
-
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,10 +21,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-
-/**
- * Created by MegaEduX on 23/05/14.
- */
 
 public class LeaderboardManager {
     private static final String kBaseApiURL = "https://edr.io/fingerdot/v1/leaderboard/";

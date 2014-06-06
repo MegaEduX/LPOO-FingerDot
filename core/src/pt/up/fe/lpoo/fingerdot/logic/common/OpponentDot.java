@@ -1,8 +1,11 @@
-package pt.up.fe.lpoo.fingerdot.logic.common;
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
 
-/**
- * Created by MegaEduX on 20/05/14.
- */
+package pt.up.fe.lpoo.fingerdot.logic.common;
 
 public class OpponentDot extends Dot {
     private boolean _correct;

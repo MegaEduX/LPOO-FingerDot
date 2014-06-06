@@ -1,3 +1,10 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.logic.singleplayer;
 
 import pt.up.fe.lpoo.fingerdot.logic.common.Dot;
@@ -6,12 +13,6 @@ import pt.up.fe.lpoo.fingerdot.logic.common.FingerDot;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
-
-/**
- * FingerDot
- *
- * Created by MegaEduX on 02/05/14.
- */
 
 public class SinglePlayerController {
     protected final FingerDot _game = FingerDot.getSharedInstance();
