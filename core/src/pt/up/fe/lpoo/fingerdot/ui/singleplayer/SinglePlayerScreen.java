@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,16 +35,16 @@ public class SinglePlayerScreen implements Screen {
 
     private SinglePlayerController _controller = null;
 
-    private Texture _pausedTexture = null;
-
     private Stage _stage = null;
+    private Stage _pausedStage = null;
 
     public SinglePlayerScreen() {
         _controller = new SinglePlayerController(1, 3);
 
-        _pausedTexture = new Texture(Gdx.files.internal("paused.png"));
-
         _stage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+        _pausedStage = new Stage(new StretchViewport(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight));
+
+        createPausedStage();
 
         Gdx.input.setInputProcessor(_stage);
 
@@ -99,19 +98,9 @@ public class SinglePlayerScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (_paused) {
-            _game.batch.begin();
-            _game.batch.draw(_pausedTexture, 200, 50);
-            _game.batch.end();
+            _pausedStage.act(Gdx.graphics.getDeltaTime());
 
-            if (!_isTouching)
-                if (Gdx.input.isTouched()) {
-                    _paused = false;
-
-                    _isTouching = true;
-                }
-
-            if (!Gdx.input.isTouched())
-                _isTouching = false;
+            _pausedStage.draw();
 
             return;
         }
@@ -131,11 +120,6 @@ public class SinglePlayerScreen implements Screen {
                 x *= _game.camera.viewportWidth / Gdx.graphics.getWidth();
                 y *= _game.camera.viewportHeight / Gdx.graphics.getHeight();
             }
-
-            System.out.println("Camera width: " + _game.camera.viewportWidth);
-
-            System.out.println("Real X: " + Gdx.input.getX() + ". Computed X: " + x);
-            System.out.println("Real Y: " + Gdx.input.getY() + ". Computed Y: " + y);
 
             if (y < 570) {
                 _controller.performTouch(x, y);
@@ -174,6 +158,40 @@ public class SinglePlayerScreen implements Screen {
         _stage.draw();
     }
 
+    public void createPausedStage() {
+        _pausedStage.getActors().clear();
+
+        Table table = new Table();
+
+        table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight);
+
+        BitmapFont font = FontGenerator.generateBitmapFont(26);
+
+        Label.LabelStyle fontStyle = new Label.LabelStyle(font, Color.WHITE);
+
+        String message = "Game Paused...";
+
+        BitmapFont.TextBounds bounds = font.getBounds(message);
+
+        table.add(new Label(message, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
+
+        table.row();
+
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        TextButton localButton = new TextButton("Resume", skin);
+        table.add(localButton).width(250).height(75);
+
+        localButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                resume();
+            }
+        });
+
+        _pausedStage.addActor(table);
+    }
+
     @Override public void show() {
 
     }
@@ -183,10 +201,14 @@ public class SinglePlayerScreen implements Screen {
     }
 
     @Override public void resume() {
+        Gdx.input.setInputProcessor(_stage);
+
         _paused = false;
     }
 
     @Override public void pause() {
+        Gdx.input.setInputProcessor(_pausedStage);
+
         _paused = true;
     }
 
@@ -195,6 +217,7 @@ public class SinglePlayerScreen implements Screen {
     }
 
     @Override public void dispose() {
-        _pausedTexture.dispose();
+        _stage.dispose();
+        _pausedStage.dispose();
     }
 }

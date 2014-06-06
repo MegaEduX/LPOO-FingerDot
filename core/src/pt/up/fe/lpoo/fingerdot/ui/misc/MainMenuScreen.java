@@ -96,15 +96,18 @@ public class MainMenuScreen implements Screen {
         multiPlayer.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!UserManager.sharedManager().internetIsReachable())
-                    return;
+                FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen(), new MainMenuScreen()));
+                return;
 
-                if (UserManager.sharedManager().getUser() == null)
-                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
-                else
-                    _game.setScreen(new MultiPlayerMatchmakingScreen());
-
-                dispose();
+//                if (!UserManager.sharedManager().internetIsReachable())
+//                    return;
+//
+//                if (UserManager.sharedManager().getUser() == null)
+//                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
+//                else
+//                    _game.setScreen(new MultiPlayerMatchmakingScreen());
+//
+//                dispose();
             };
         });
 
@@ -140,7 +143,7 @@ public class MainMenuScreen implements Screen {
 
         BitmapFont font = FontGenerator.generateBitmapFont(16);
 
-        String loggedInMessage = (UserManager.sharedManager().getUser() != null ? "Logged in as " + UserManager.sharedManager().getUser().getUsername() + "." : "Not logged in.");
+        String loggedInMessage = (UserManager.sharedManager().getUser() != null ? "Logged in as " + UserManager.sharedManager().getUser().getUsername() + "#" + UserManager.sharedManager().getUser().getPin() + "." : "Not logged in.");
 
         if (!UserManager.sharedManager().internetIsReachable())
             loggedInMessage = "Not connected to the internet. Network functions disabled.";
@@ -174,7 +177,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override public void show() {
-
+        Gdx.input.setInputProcessor(_stage);
     }
 
     @Override public void hide() {

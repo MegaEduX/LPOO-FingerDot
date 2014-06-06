@@ -124,6 +124,8 @@ public class MultiPlayerMessenger implements WarpListener {
     }
 
     public void onGameStarted(String message) {
+        _mpmScreen.setCurrentMessage("Negotiating the game...");
+
         if (WarpController.getInstance().isRoomOwner) {
             //  Initializing game with 6 * 40 (240) dots... Should be enough for a long game. :P
 

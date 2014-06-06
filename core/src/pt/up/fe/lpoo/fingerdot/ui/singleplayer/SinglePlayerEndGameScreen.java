@@ -107,7 +107,7 @@ public class SinglePlayerEndGameScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (UserManager.sharedManager().getUser() == null) {
-                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(self));
+                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(self, self));
                 } else if (!_sentToInternetLeaderboards) {
                     LeaderboardEntry remoteEntry = new LeaderboardEntry(UserManager.sharedManager().getUser().getUsername(), timeInMillis, version, _finalScore);
 
@@ -155,7 +155,7 @@ public class SinglePlayerEndGameScreen implements Screen {
     }
 
     @Override public void show() {
-
+        Gdx.input.setInputProcessor(_stage);
     }
 
     @Override public void hide() {

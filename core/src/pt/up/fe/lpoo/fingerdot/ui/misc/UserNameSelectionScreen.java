@@ -30,8 +30,14 @@ public class UserNameSelectionScreen implements Screen {
     private boolean _needsRedraw = false;
 
     private Screen _callerScreen = null;
+    private Screen _nextScreen = null;
 
-    public UserNameSelectionScreen(Screen callerScreen) {
+    private Table _table = null;
+
+    private String _headerMessage = "Choose an Username:";
+    private String _bottomMessage = "Existing Users: Login as Username#PIN, Example: MyCoolUsername#1234";
+
+    public UserNameSelectionScreen(Screen callerScreen, Screen nextScreen) {
         Gdx.input.setCatchBackKey(true);
 
         _skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -42,6 +48,7 @@ public class UserNameSelectionScreen implements Screen {
         _needsRedraw = true;
 
         _callerScreen = callerScreen;
+        _nextScreen = nextScreen;
     }
 
     private void drawStage() {
@@ -49,46 +56,51 @@ public class UserNameSelectionScreen implements Screen {
 
         _stage.getActors().clear();
 
-        Table table = new Table();
+        _table = new Table();
 
-        table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight);
+        _table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight);
 
         BitmapFont font = FontGenerator.generateBitmapFont(26);
 
         Label.LabelStyle fontStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        String insertMessage = "Choose an Username:";
+        BitmapFont.TextBounds bounds = font.getBounds(_headerMessage);
 
-        BitmapFont.TextBounds bounds = font.getBounds(insertMessage);
+        _table.add(new Label(_headerMessage, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
 
-        table.add(new Label(insertMessage, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
+        _table.row();
 
-        table.row();
+        final TextField textField = new TextField("", _skin);
 
-        final TextField textfield = new TextField("", _skin);
+        textField.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                setEditing(true);
+            }
+        });
 
-        table.add(textfield).width(FingerDot.getSharedInstance().camera.viewportWidth / 2).height(textfield.getHeight());
+        textField.setMessageText("Your cool username here!");
 
-        table.row();
+        _table.add(textField).width(FingerDot.getSharedInstance().camera.viewportWidth / 2).height(textField.getHeight());
+
+        _table.row();
 
         font = FontGenerator.generateBitmapFont(18);
 
         fontStyle = new Label.LabelStyle(font, Color.WHITE);
 
-        insertMessage = "Existing Users: Login as Username#PIN, Example: MyCoolUsername#1234";
+        bounds = font.getBounds(_bottomMessage);
 
-        bounds = font.getBounds(insertMessage);
+        _table.add(new Label(_bottomMessage, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
 
-        table.add(new Label(insertMessage, fontStyle)).width(bounds.width).height(bounds.height).pad(25);
-
-        table.row();
+        _table.row();
 
         TextButton singlePlayer = new TextButton("Save!", _skin);
 
         singlePlayer.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String[] split = textfield.getText().split("#");
+                String[] split = textField.getText().split("#");
 
                 String pin = "";
 
@@ -98,17 +110,58 @@ public class UserNameSelectionScreen implements Screen {
                     pin = "";
                 }
 
-                if (UserManager.sharedManager().login(new User(split[0], pin))) {
-                    FingerDot.getSharedInstance().setScreen(_callerScreen);
-                } else {
-                    textfield.setText("Username invalid or in use!");
+                if (UserManager.sharedManager().login(new User(split[0], pin)))
+                    FingerDot.getSharedInstance().setScreen(_nextScreen);
+                else {
+                    _bottomMessage = "Username invalid or in use!";
+
+                    _needsRedraw = true;
                 }
             }
         });
 
-        table.add(singlePlayer).width(200).height(50).padBottom(20);
+        _table.add(singlePlayer).width(200).height(50).padBottom(20);
 
-        _stage.addActor(table);
+        _stage.addActor(_table);
+
+        if (Gdx.app.getType() == Application.ApplicationType.Android)
+            return;
+
+        Table backTable = new Table();
+
+        TextButton backButton = new TextButton("< Back", _skin);
+        backTable.add(backButton).width(150).height(75);
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                FingerDot.getSharedInstance().setScreen(_callerScreen);
+
+                dispose();
+            }
+        });
+
+        backTable.setX(150);
+        backTable.setY(650);
+
+        _stage.addActor(backTable);
+    }
+
+    private void setEditing(boolean editing) {
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop)
+            return;
+
+        if (editing) {
+            _table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight / 2);
+
+            _table.setX(0);
+            _table.setY(FingerDot.getSharedInstance().camera.viewportHeight / 2);
+        } else {
+            _table.setSize(FingerDot.getSharedInstance().camera.viewportWidth, FingerDot.getSharedInstance().camera.viewportHeight);
+
+            _table.setX(0);
+            _table.setY(0);
+        }
     }
 
     @Override public void render(float delta) {
@@ -123,7 +176,7 @@ public class UserNameSelectionScreen implements Screen {
         _stage.draw();
 
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-            FingerDot.getSharedInstance().setScreen(new MainMenuScreen());
+            FingerDot.getSharedInstance().setScreen(_callerScreen);
 
             dispose();
         }
@@ -150,6 +203,7 @@ public class UserNameSelectionScreen implements Screen {
     }
 
     @Override public void dispose() {
-
+        _stage.dispose();
+        _skin.dispose();
     }
 }
