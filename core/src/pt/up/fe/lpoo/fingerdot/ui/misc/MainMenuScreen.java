@@ -96,18 +96,15 @@ public class MainMenuScreen implements Screen {
         multiPlayer.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen(), new MainMenuScreen()));
-                return;
+                if (!UserManager.sharedManager().internetIsReachable())
+                    return;
 
-//                if (!UserManager.sharedManager().internetIsReachable())
-//                    return;
-//
-//                if (UserManager.sharedManager().getUser() == null)
-//                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
-//                else
-//                    _game.setScreen(new MultiPlayerMatchmakingScreen());
-//
-//                dispose();
+                if (UserManager.sharedManager().getUser() == null)
+                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen()));
+                else
+                    _game.setScreen(new MultiPlayerMatchmakingScreen());
+
+                dispose();
             };
         });
 

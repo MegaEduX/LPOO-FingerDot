@@ -51,6 +51,7 @@ public class GameBuilder {
             if (_messenger != null) {
                 _messenger.onDotsReceived(returnArray);
             }
-        }
+        } else
+            System.out.println("Missing " + (_parts - _partArray.size()) + " parts...");
     }
 }
