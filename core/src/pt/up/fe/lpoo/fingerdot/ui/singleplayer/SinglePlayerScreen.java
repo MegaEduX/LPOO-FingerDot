@@ -39,6 +39,10 @@ public class SinglePlayerScreen implements Screen {
     private Stage _stage = null;
     private Stage _pausedStage = null;
 
+    /**
+     * Initializes a new singleplayer screen.
+     */
+
     public SinglePlayerScreen() {
         _controller = new SinglePlayerController(1, 3);
 
@@ -51,6 +55,10 @@ public class SinglePlayerScreen implements Screen {
 
         drawStage();
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     void drawStage() {
         _stage.getActors().clear();
@@ -91,6 +99,12 @@ public class SinglePlayerScreen implements Screen {
 
         _stageNeedsUpdate = false;
     }
+
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
 
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -159,6 +173,10 @@ public class SinglePlayerScreen implements Screen {
         _stage.draw();
     }
 
+    /**
+     * Creates the paused stage.
+     */
+
     public void createPausedStage() {
         _pausedStage.getActors().clear();
 
@@ -193,13 +211,25 @@ public class SinglePlayerScreen implements Screen {
         _pausedStage.addActor(table);
     }
 
+    /**
+     * Called when the screen is shown.
+     */
+
     @Override public void show() {
 
     }
 
+    /**
+     * Called when the screen is hidden.
+     */
+
     @Override public void hide() {
 
     }
+
+    /**
+     * Called when the game is resumed.
+     */
 
     @Override public void resume() {
         Gdx.input.setInputProcessor(_stage);
@@ -207,15 +237,32 @@ public class SinglePlayerScreen implements Screen {
         _paused = false;
     }
 
+    /**
+     * Called when the game is paused.
+     */
+
     @Override public void pause() {
         Gdx.input.setInputProcessor(_pausedStage);
 
         _paused = true;
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
+
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
     @Override public void dispose() {
         _stage.dispose();

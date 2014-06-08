@@ -66,6 +66,10 @@ public class MultiPlayerController extends SinglePlayerController {
         return _opponentTouchedDots;
     }
 
+    /**
+     * Perform a tick.
+     */
+
     @Override public void performTick() {
         if (_lives <= 0 || _dots == null || _gameState != GameState.GameStatePlaying)
             return;
@@ -117,6 +121,14 @@ public class MultiPlayerController extends SinglePlayerController {
             }
         }
     }
+
+    /**
+     * Perform a touch.
+     *
+     * @param xCoordinate The X coordinate.
+     * @param yCoordinate The Y coordinate.
+     * @return The points acquired with the touch.
+     */
 
     @Override public int performTouch(int xCoordinate, int yCoordinate) {
         boolean correct = false;
@@ -182,6 +194,12 @@ public class MultiPlayerController extends SinglePlayerController {
 
         return ret;
     }
+
+    /**
+     * Getter for the dots left on the game.
+     *
+     * @return The dots left on the game.
+     */
 
     public int dotsLeftCount() {
         return _dots.size();

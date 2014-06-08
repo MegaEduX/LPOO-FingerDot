@@ -38,9 +38,17 @@ public class MainMenuScreen implements Screen {
     private Skin _skin = null;
     private Stage _stage = null;
 
+    /**
+     * Initializes a main menu screen.
+     */
+
     public MainMenuScreen() {
         drawScene();
     }
+
+    /**
+     * Draws the scene internally.
+     */
 
     private void drawScene() {
         if (_menuTexture == null)
@@ -148,6 +156,12 @@ public class MainMenuScreen implements Screen {
         _stage.addActor(lbl);
     }
 
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
+
     @Override public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -166,25 +180,53 @@ public class MainMenuScreen implements Screen {
             System.exit(0);
     }
 
+    /**
+     * Called when the screen is shown.
+     */
+
     @Override public void show() {
         Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
 
-    @Override public void pause() {
+    /**
+     * Called when the game is paused.
+     */
 
+    @Override public void pause() {
     }
+
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
 
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
+
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
     @Override public void dispose() {
         _menuTexture.dispose();

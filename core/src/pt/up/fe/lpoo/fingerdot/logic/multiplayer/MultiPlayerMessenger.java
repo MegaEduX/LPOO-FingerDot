@@ -55,6 +55,10 @@ public class MultiPlayerMessenger implements WarpListener {
 
     private static final int kMaxDotsPerChatMessage = 6;    //  Theoretically this is 8, but let's play safe.
 
+    /**
+     * Starts a connection with the MultiPlayer server.
+     */
+
     public void start() {
         WarpClient.initialize(AppWarpAppKey, AppWarpSecretKey);
 
@@ -69,17 +73,40 @@ public class MultiPlayerMessenger implements WarpListener {
         WarpController.getInstance().startAppWarp(username);
     }
 
-    public void stop() {
+    /**
+     * Stops a connection with the server.
+     */
 
+    public void stop() {
+        WarpController.getInstance().stopAppWarp();
     }
+
+    /**
+     * Setter for the MultiPlayer Screen.
+     * @param mps A MultiPlayerScreen instance.
+     */
 
     public void setMultiPlayerScreen(MultiPlayerScreen mps) {
         _mpScreen = mps;
     }
 
+    /**
+     * Setter for the MultiPlayer Matchmaking Screen
+     * @param mpms A MultiPlayerMatchmakingScreen instance.
+     */
+
     public void setMultiPlayerMatchmakingScreen(MultiPlayerMatchmakingScreen mpms) {
         _mpmScreen = mpms;
     }
+
+    /**
+     * Broadcast a touch.
+     *
+     * @param x The X coordinate of the touch.
+     * @param y The Y coordinate of the touch.
+     * @param points The points' worth of the touch.
+     * @param correct The "correct-ness" of the touch.
+     */
 
     public void broadcastTouch(int x, int y, float points, boolean correct) {
         try {
@@ -96,6 +123,14 @@ public class MultiPlayerMessenger implements WarpListener {
         }
     }
 
+    /**
+     * Broadcast a game end.
+     *
+     * @param score The score of the user.
+     * @param dotsLeft The dots left on the game.
+     * @param expectedState The state of the game.
+     */
+
     public void broadcastEndOfGame(int score, int dotsLeft, MultiPlayerController.GameState expectedState) {
         try {
             GameOverMessage message = new GameOverMessage(score, dotsLeft, expectedState);
@@ -105,6 +140,12 @@ public class MultiPlayerMessenger implements WarpListener {
 
         }
     }
+
+    /**
+     * Called when the game is started.
+     *
+     * @param message The message sent along with the call.
+     */
 
     public void onGameStarted(String message) {
         _mpmScreen.setCurrentMessage("Negotiating the game...");
@@ -130,6 +171,12 @@ public class MultiPlayerMessenger implements WarpListener {
         _mpmScreen.startGame();
     }
 
+    /**
+     * Called when a connection is established with the server.
+     *
+     * @param status true on success, false otherwise.
+     */
+
     public void onConnectDone(boolean status) {
         if (status)
             _mpmScreen.setCurrentMessage("Searching for a suitable opponent...");
@@ -137,21 +184,52 @@ public class MultiPlayerMessenger implements WarpListener {
             _mpmScreen.setCurrentMessage("Connection failed! Please try again later.");
     }
 
+    /**
+     * Called when an error has occoured.
+     *
+     * @param message The error message.
+     */
+
     public void onError(String message) {
 
     }
+
+    /**
+     * Called when a game has finished.
+     *
+     * @param code The code.
+     * @param isRemote Whether the message was sent by a remote client or not.
+     */
 
     public void onGameFinished(int code, boolean isRemote) {
 
     }
 
+    /**
+     * Called when the game starts waiting for an opponent.
+     *
+     * @param message The message sent along with the call.
+     */
+
     public void onWaitingStarted(String message) {
 
     }
 
+    /**
+     * Called when a list of dots is received.
+     *
+     * @param dots The list of dots.
+     */
+
     public void onDotsReceived(ArrayList<Dot> dots) {
         _mpScreen.getController().setDots(dots);
     }
+
+    /**
+     * Called when a game update is received.
+     *
+     * @param message The game update.
+     */
 
     public void onGameUpdateReceived(String message) {
         System.out.println("Received message: " + message);

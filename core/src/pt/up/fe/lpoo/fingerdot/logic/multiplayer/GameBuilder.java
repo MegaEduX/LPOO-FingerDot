@@ -18,6 +18,12 @@ public class GameBuilder {
 
     int _parts;
 
+    /**
+     * Intializes a game builder.
+     *
+     * @param msg A MultiplayerMessenger instance.
+     */
+
     public GameBuilder(MultiPlayerMessenger msg) {
         _messenger = msg;
 
@@ -25,6 +31,12 @@ public class GameBuilder {
 
         _parts = 0;
     }
+
+    /**
+     * Add a part to the builder.
+     *
+     * @param part The part to add.
+     */
 
     public void addPart(GameGeneratorPart part) {
         _partArray.add(part);
@@ -52,7 +64,6 @@ public class GameBuilder {
             if (_messenger != null) {
                 _messenger.onDotsReceived(returnArray);
             }
-        } else
-            System.out.println("Missing " + (_parts - _partArray.size()) + " parts...");
+        }
     }
 }

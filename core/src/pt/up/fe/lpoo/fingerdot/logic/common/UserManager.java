@@ -40,6 +40,12 @@ public class UserManager {
 
     private User _user = null;
 
+    /**
+     * Getter for the shared instance of the singleton.
+     *
+     * @return The object's shared instance.
+     */
+
     public static UserManager sharedManager() {
         if (_sharedInstance == null)
             _sharedInstance = new UserManager();
@@ -47,13 +53,19 @@ public class UserManager {
         return _sharedInstance;
     }
 
-    public UserManager() {
+    private UserManager() {
         try {
             loadUserFromDisk();
         } catch (Exception exc) {
 
         }
     }
+
+    /**
+     * Getter for the logged-in user.
+     *
+     * @return The logged-in user.
+     */
 
     public User getUser() {
         return _user;
@@ -63,11 +75,17 @@ public class UserManager {
      *  Code taken from http://stackoverflow.com/questions/6825226/trust-anchor-not-found-for-android-ssl-connection
      */
 
-    final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
+    final private static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) {
             return true;
         }
     };
+
+    /**
+     * Checks for the availability of the internet connection.
+     *
+     * @return true if the FingerDot's servers are reachable, false if not.
+     */
 
     public boolean internetIsReachable() {
         try {
@@ -103,6 +121,13 @@ public class UserManager {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Tries to login a user with the server.
+     *
+     * @param details The user.
+     * @return true on success, false on failure.
+     */
 
     public boolean login(User details) {
         try {

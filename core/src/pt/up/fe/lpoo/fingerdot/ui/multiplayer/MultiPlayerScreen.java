@@ -36,9 +36,19 @@ public class MultiPlayerScreen implements Screen {
 
     private Stage _stage = null;
 
+    /**
+     * Initializes a new multiplayer screen.
+     */
+
     public MultiPlayerScreen() {
         _controller = new MultiPlayerController(_game, 1, 3);
     }
+
+    /**
+     * Initializes a new multiplayer screen with a given messenger.
+     *
+     * @param msg A MultiPlayerMessenger instance.
+     */
 
     public MultiPlayerScreen(MultiPlayerMessenger msg) {
         this();
@@ -56,9 +66,19 @@ public class MultiPlayerScreen implements Screen {
         drawStage();
     }
 
+    /**
+     * Getter for the object's controller.
+     *
+     * @return A MultiPlayerController instance.
+     */
+
     public MultiPlayerController getController() {
         return _controller;
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     void drawStage() {
         _stage.getActors().clear();
@@ -87,6 +107,12 @@ public class MultiPlayerScreen implements Screen {
 
         _stageNeedsUpdate = false;
     }
+
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
 
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -161,27 +187,56 @@ public class MultiPlayerScreen implements Screen {
         _stage.draw();
     }
 
-    @Override public void show() {
+    /**
+     * Called when the screen is shown.
+     */
 
+    @Override public void show() {
+        Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
+
+    /**
+     * Called when the game is paused.
+     */
 
     @Override public void pause() {
 
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
 
-    @Override public void dispose() {
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
+    @Override public void dispose() {
+        _stage.dispose();
     }
 }

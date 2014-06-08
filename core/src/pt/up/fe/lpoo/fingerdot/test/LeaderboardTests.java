@@ -1,31 +1,38 @@
+//
+//  FingerDot
+//
+//  Created by Eduardo Almeida and Joao Almeida
+//  LPOO 13/14
+//
+
 package pt.up.fe.lpoo.fingerdot.test;
 
 import org.junit.*;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardEntry;
+import pt.up.fe.lpoo.fingerdot.logic.singleplayer.LeaderboardManager;
 
 import static org.junit.Assert.*;
 
 public class LeaderboardTests {
+    LeaderboardManager _manager = LeaderboardManager.sharedManager();
+
     @Before public void setUp() throws Exception {
 
     }
 
-    @Test public void readLocalHighScores() {
-        //  Tests for the ability to correctly read and parse the local high scores.
-    }
-
-    @Test public void addLocalHighScore() {
-        //  Tests for the ability to add a local high score.
-    }
-
-    @Test public void clearLocalHighScores() {
-        //  Tests for the ability to clear the local leaderboard.
-    }
+    /**
+     * Tests whether the game can read the internet leaderboards.
+     */
 
     @Test public void readInternetHighScores() {
-        //  Tests for the ability to get the worldwide leaderboard from the internet.
+        assertTrue(_manager.retrieveOnlineLeaderboard());
     }
 
+    /**
+     * Tests whether the game can add a score to the internet leaderboards.
+     */
+
     @Test public void addInternetHighScore() {
-        //  Tests for the ability to add a highscore to the worldwide internet leaderboard.
+        assertTrue(_manager.publishScoreOnOnlineLeaderboard(new LeaderboardEntry("Test Suite", "0", "test-suite", 1)));
     }
 }

@@ -22,13 +22,25 @@ public class FingerDot extends Game {
     public BitmapFont font;
     public OrthographicCamera camera;
 
-    public final String version = "0.1-alpha";
+    public final String version = "1.0";
 
     private static FingerDot _sharedInstance;
+
+    /**
+     * Getter for the object's singleton.
+     *
+     * @return A shared instance of the object.
+     */
 
     public static FingerDot getSharedInstance() {
         return _sharedInstance;
     }
+
+    /**
+     * Creates the object.
+     *
+     * Called by libGDX, should not be called directly.
+     */
 
     public void create() {
         if (_sharedInstance == null)
@@ -53,9 +65,19 @@ public class FingerDot extends Game {
         this.setScreen(new MainMenuScreen());
     }
 
+    /**
+     * Renders the Game.
+     */
+
     public void render() {
         super.render();
     }
+
+    /**
+     * Releases the objects.
+     *
+     * Should never be called directly.
+     */
 
     public void dispose() {
         batch.dispose();

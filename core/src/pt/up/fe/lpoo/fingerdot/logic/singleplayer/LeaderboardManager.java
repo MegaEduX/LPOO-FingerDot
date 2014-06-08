@@ -36,6 +36,12 @@ public class LeaderboardManager {
 
     private static LeaderboardManager _sharedInstance = null;
 
+    /**
+     * Returns the shared instance of the singleton.
+     *
+     * @return The object's shared instance.
+     */
+
     public static LeaderboardManager sharedManager() {
         if (_sharedInstance == null)
             _sharedInstance = new LeaderboardManager();
@@ -44,8 +50,18 @@ public class LeaderboardManager {
     }
 
     private LeaderboardManager() {
-        loadLocalLeaderboard();
+        try {
+            loadLocalLeaderboard();
+        } catch (Exception e) {
+
+        }
     }
+
+    /**
+     * Adds an entry to the local leaderboard.
+     *
+     * @param entry A leaderboard entry.
+     */
 
     public void addLocalScore(LeaderboardEntry entry) {
         _localLeaderboard.add(entry);
@@ -54,6 +70,12 @@ public class LeaderboardManager {
 
         saveLocalLeaderboard();
     }
+
+    /**
+     * Loads the local leaderboard.
+     *
+     * @return true on success, false otherwise.
+     */
 
     public boolean loadLocalLeaderboard() {
         FileHandle file = Gdx.files.local(kLocalLeaderboardPath);
@@ -77,6 +99,12 @@ public class LeaderboardManager {
         return false;
     }
 
+    /**
+     * Saves the local leaderboard.
+     *
+     * @return true on success, false otherwise.
+     */
+
     public boolean saveLocalLeaderboard() {
         FileHandle file = Gdx.files.local(kLocalLeaderboardPath);
 
@@ -92,6 +120,12 @@ public class LeaderboardManager {
 
         return false;
     }
+
+    /**
+     * Retrieves the online leaderboard.
+     *
+     * @return true on success, false otherwise.
+     */
 
     public boolean retrieveOnlineLeaderboard() {
         try {
@@ -125,13 +159,32 @@ public class LeaderboardManager {
         return true;
     }
 
+    /**
+     * Getter for the online leaderboard.
+     *
+     * @return The online leaderboard.
+     */
+
     public ArrayList<LeaderboardEntry> getOnlineLeaderboard() {
         return _onlineLeaderboard;
     }
 
+    /**
+     * Getter for the local leaderboard.
+     *
+     * @return The local leaderboard.
+     */
+
     public ArrayList<LeaderboardEntry> getLocalLeaderboard() {
         return _localLeaderboard;
     }
+
+    /**
+     * Publishes a score to the online leaderboard.
+     *
+     * @param entry The leaderboard entry.
+     * @return true on success, false otherwise.
+     */
 
     public static boolean publishScoreOnOnlineLeaderboard(LeaderboardEntry entry) {
         try {

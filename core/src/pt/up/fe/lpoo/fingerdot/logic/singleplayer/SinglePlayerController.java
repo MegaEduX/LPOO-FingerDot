@@ -34,6 +34,13 @@ public class SinglePlayerController {
 
     protected boolean _paused;
 
+    /**
+     * Creates a single player game controller.
+     *
+     * @param level The level to start on.
+     * @param lives The lives to start with.
+     */
+
     public SinglePlayerController(int level, int lives) {
         _lives = lives;
         _level = level;
@@ -47,6 +54,10 @@ public class SinglePlayerController {
         _dotsOnPlay = new ArrayList<Dot>();
         _rng = new Random();
     }
+
+    /**
+     * Perform a game tick.
+     */
 
     public void performTick() {
         if (_lives <= 0)
@@ -79,6 +90,14 @@ public class SinglePlayerController {
             }
         }
     }
+
+    /**
+     * Perform a touch.
+     *
+     * @param xCoordinate The X coordinate of the touch.
+     * @param yCoordinate The Y coordinate of the touch.
+     * @return The score acquired with the touch.
+     */
 
     public int performTouch(int xCoordinate, int yCoordinate) {
         boolean correct = false;
@@ -117,41 +136,95 @@ public class SinglePlayerController {
         return ret;
     }
 
+    /**
+     * Getter for the number of lives.
+     *
+     * @return The number of lives.
+     */
+
     public int getLives() {
         return _lives;
     }
+
+    /**
+     * Getter for the game score.
+     *
+     * @return The game score.
+     */
 
     public int getScore() {
         return _score;
     }
 
+    /**
+     * Getter for the current game level.
+     *
+     * @return The current game level.
+     */
+
     public int getLevel() {
         return _level;
     }
+
+    /**
+     * Increase the number of lives.
+     */
 
     public void increaseLife() {
         _lives++;
     }
 
+    /**
+     * Decrease the number of lives.
+     */
+
     public void decreaseLife() {
         _lives--;
     }
+
+    /**
+     * Setter for the number of lives.
+     *
+     * @param lives The new number of lives.
+     */
 
     public void setLives(int lives) {
         _lives = lives;
     }
 
+    /**
+     * Increase the game score.
+     *
+     * @param score The number to increase the score by.
+     */
+
     public void increaseScore(int score) {
         _score += score;
     }
+
+    /**
+     * Decrease the game score.
+     *
+     * @param score The number to decrease the score by.
+     */
 
     public void decreaseScore(int score) {
         _score -= score;
     }
 
+    /**
+     * Set the game score.
+     *
+     * @param score The number to set the score to.
+     */
+
     public void setScore(int score) {
         _score = score;
     }
+
+    /**
+     * Increase the game level.
+     */
 
     public void increaseLevel() {
         _level++;
@@ -163,6 +236,10 @@ public class SinglePlayerController {
         _leftToAdvanceLevel = _baseAdvanceLevel * _level;
     }
 
+    /**
+     * Decrease the game level.
+     */
+
     public void decreaseLevel() {
         _level--;
 
@@ -171,17 +248,11 @@ public class SinglePlayerController {
         _leftToAdvanceLevel = _baseAdvanceLevel * _level;
     }
 
-    public void setPaused(boolean paused) {
-        _paused = paused;
-    }
-
-    public void togglePaused() {
-        _paused = !_paused;
-    }
-
-    public boolean getPaused() {
-        return _paused;
-    }
+    /**
+     * Getter for the list of dots on play.
+     *
+     * @return The list of dots on play.
+     */
 
     public ArrayList<Dot> getDotsOnPlay() {
         return _dotsOnPlay;

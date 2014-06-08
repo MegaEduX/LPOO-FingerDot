@@ -47,6 +47,10 @@ public class SinglePlayerEndGameScreen implements Screen {
 
     int _finalScore = 0;
 
+    /**
+     * Initializes an end game screen.
+     */
+
     public SinglePlayerEndGameScreen(int finalScore) {
         self = this;
 
@@ -60,6 +64,10 @@ public class SinglePlayerEndGameScreen implements Screen {
 
         drawStage();
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     public void drawStage() {
         _stage.getActors().clear();
@@ -145,6 +153,12 @@ public class SinglePlayerEndGameScreen implements Screen {
         _stage.addActor(table);
     }
 
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
+
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -163,27 +177,56 @@ public class SinglePlayerEndGameScreen implements Screen {
         _stage.draw();
     }
 
+    /**
+     * Called when the screen is shown.
+     */
+
     @Override public void show() {
         Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
+
+    /**
+     * Called when the game is paused.
+     */
 
     @Override public void pause() {
 
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
 
-    @Override public void dispose() {
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
+    @Override public void dispose() {
+        _stage.dispose();
     }
 }

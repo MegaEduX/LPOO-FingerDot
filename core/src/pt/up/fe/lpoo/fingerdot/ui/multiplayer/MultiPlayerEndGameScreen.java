@@ -35,15 +35,21 @@ public class MultiPlayerEndGameScreen implements Screen {
 
     private Stage _stage = null;
 
-    private final MultiPlayerEndGameScreen self;
+    /**
+     * Initializes a new end game screen.
+     */
 
     public MultiPlayerEndGameScreen() {
-        self = this;
-
         WarpController.getInstance().stopAppWarp();
 
         Gdx.input.setCatchBackKey(true);
     }
+
+    /**
+     * Initializes a new end game screen with a given game state.
+     *
+     * @param gameStatus The game state.
+     */
 
     public MultiPlayerEndGameScreen(MultiPlayerController.GameState gameStatus) {
         this();
@@ -56,6 +62,13 @@ public class MultiPlayerEndGameScreen implements Screen {
 
         drawStage();
     }
+
+    /**
+     * Returns a readable game state.
+     *
+     * @param state The game state.
+     * @return A readable string for the given game state.
+     */
 
     private String readableState(MultiPlayerController.GameState state) {
         switch (state) {
@@ -75,6 +88,10 @@ public class MultiPlayerEndGameScreen implements Screen {
                 return "";
         }
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     public void drawStage() {
         _stage.getActors().clear();
@@ -128,6 +145,12 @@ public class MultiPlayerEndGameScreen implements Screen {
         _stage.addActor(table);
     }
 
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
+
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -143,27 +166,56 @@ public class MultiPlayerEndGameScreen implements Screen {
         _stage.draw();
     }
 
-    @Override public void show() {
+    /**
+     * Called when the screen is shown.
+     */
 
+    @Override public void show() {
+        Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
+
+    /**
+     * Called when the game is paused.
+     */
 
     @Override public void pause() {
 
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
 
-    @Override public void dispose() {
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
+    @Override public void dispose() {
+        _stage.dispose();
     }
 }

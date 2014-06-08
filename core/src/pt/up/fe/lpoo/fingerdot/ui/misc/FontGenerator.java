@@ -15,6 +15,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 public class FontGenerator {
     private static final String kDefaultFontFileName = "hecubus.ttf";
 
+    /**
+     * Generates a bitmap font with a given size.
+     *
+     * @param size The size of the font.
+     * @return The bitmap font.
+     */
+
     static public BitmapFont generateBitmapFont(int size) {
         FileHandle fontFile = Gdx.files.internal(kDefaultFontFileName);
 

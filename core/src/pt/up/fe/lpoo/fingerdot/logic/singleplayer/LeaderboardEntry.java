@@ -16,9 +16,22 @@ public class LeaderboardEntry implements Serializable {
 
     public int score;
 
+    /**
+     * Initializes an empty leaderboard entry.
+     */
+
     public LeaderboardEntry() {
 
     }
+
+    /**
+     * Initializes a leaderboard entry.
+     *
+     * @param n The username of the user.
+     * @param t The timestamp of the entry.
+     * @param v The version of the application.
+     * @param s The score.
+     */
 
     public LeaderboardEntry(String n, String t, String v, int s) {
         username = n;

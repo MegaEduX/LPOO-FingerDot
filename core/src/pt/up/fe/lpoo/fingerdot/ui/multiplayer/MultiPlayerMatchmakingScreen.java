@@ -38,6 +38,10 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
     private String _currentMessage = "Connecting to server...";
 
+    /**
+     * Initializes a matchmaking screen.
+     */
+
     public MultiPlayerMatchmakingScreen() {
         _msg = new MultiPlayerMessenger();
 
@@ -52,6 +56,10 @@ public class MultiPlayerMatchmakingScreen implements Screen {
 
         drawStage();
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     private void drawStage() {
         _stage.getActors().clear();
@@ -97,11 +105,23 @@ public class MultiPlayerMatchmakingScreen implements Screen {
         _needsRedraw = false;
     }
 
+    /**
+     * Sets the current on-screen message.
+     *
+     * @param message The on-screen message to present.
+     */
+
     public void setCurrentMessage(String message) {
         _currentMessage = message;
 
         _needsRedraw = true;
     }
+
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
 
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -129,33 +149,70 @@ public class MultiPlayerMatchmakingScreen implements Screen {
         }
     }
 
+    /**
+     * Starts the multiplayer game.
+     */
+
     public void startGame() {
         _startGameOnNextRun = true;
     }
+
+    /**
+     * Aborts the matchmaking session.
+     */
 
     public void abortMatchmaking() {
         _msg.stop();
     }
 
-    @Override public void show() {
+    /**
+     * Called when the screen is shown.
+     */
 
+    @Override public void show() {
+        Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
+
+    /**
+     * Called when the game is paused.
+     */
 
     @Override public void pause() {
 
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
+
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
     @Override public void dispose() {
         _stage.dispose();

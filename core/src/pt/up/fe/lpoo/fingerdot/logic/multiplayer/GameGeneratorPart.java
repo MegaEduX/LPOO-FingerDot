@@ -18,19 +18,45 @@ public class GameGeneratorPart implements Serializable {
     int _p;
     int _l;
 
+    /**
+     * Intializes a part of a multiplayer game's dots.
+     *
+     * @param object The dots included on the part.
+     * @param part The part number.
+     * @param length The number of dots on the part.
+     */
+
     public GameGeneratorPart(ArrayList<Dot> object, int part, int length) {
         _gd = object;
         _p = part;
         _l = length;
     }
 
+    /**
+     * Getter for the dots on the part.
+     *
+     * @return The dots included on the part.
+     */
+
     public ArrayList<Dot> getDots() {
         return _gd;
     }
 
+    /**
+     * Getter for the number of the part.
+     *
+     * @return The part number.
+     */
+
     public int getPartNumber() {
         return _p;
     }
+
+    /**
+     * Getter for the part length.
+     *
+     * @return The part length.
+     */
 
     public int getLength() {
         return _l;

@@ -46,7 +46,7 @@ public class WarpController {
 
     public boolean isRoomOwner = false;
 	
-	public WarpController() {
+	private WarpController() {
         try {
             WarpClient.initialize(apiKey, secretKey);
             warpClient = WarpClient.getInstance();
@@ -60,6 +60,12 @@ public class WarpController {
 		warpClient.addRoomRequestListener(new RoomListener(this));
 		warpClient.addNotificationListener(new NotificationListener(this));
 	}
+
+    /**
+     * Returns the shared instance of the singleton.
+     *
+     * @return The object's shared instance.
+     */
 	
 	public static WarpController getInstance() {
 		if (instance == null) {
@@ -68,16 +74,32 @@ public class WarpController {
 
 		return instance;
 	}
+
+    /**
+     * Starts the multiplayer session.
+     *
+     * @param localUser Username to start the session with.
+     */
 	
 	public void startAppWarp(String localUser) {
 		this._localUser = localUser;
 		warpClient.connectWithUserName(localUser);
 	}
+
+    /**
+     * Setter for the controller's listener.
+     *
+     * @param listener The controller's listener.
+     */
 	
 	public void setListener(WarpListener listener){
 		this.warpListener = listener;
 	}
-	
+
+    /**
+     * Stops the multiplayer session.
+     */
+
 	public void stopAppWarp() {
 		if (_connected) {
 			warpClient.unsubscribeRoom(_roomId);
@@ -86,20 +108,23 @@ public class WarpController {
 
 		warpClient.disconnect();
 	}
+
+    /**
+     * Sends a game update.
+     *
+     * @param msg A game update.
+     */
 	
 	public void sendGameUpdate(String msg){
 		if (_connected)
 		    warpClient.sendUpdatePeers((_localUser + "#@" + msg).getBytes());
 	}
-	
-	public void updateResult(int code, String msg){
-		if (_connected) {
-			STATE = kGameComplete;
-			HashMap<String, Object> properties = new HashMap<String, Object>();
-			properties.put("result", code);
-			warpClient.lockProperties(properties);
-		}
-	}
+
+    /**
+     * Called when a connection is established.
+     *
+     * @param status The connection's status.
+     */
 	
 	public void onConnectDone(boolean status){
 		log("onConnectDone: "+status);
@@ -113,10 +138,12 @@ public class WarpController {
 
         warpListener.onConnectDone(status);
 	}
-	
-	public void onDisconnectDone(boolean status){
-		
-	}
+
+    /**
+     * Called when a chat room is created.
+     *
+     * @param roomId The chat room identifier.
+     */
 	
 	public void onRoomCreated(String roomId){
 		if (roomId != null) {
@@ -125,6 +152,12 @@ public class WarpController {
 			handleError();
 		}
 	}
+
+    /**
+     * Called when a chat room is joined.
+     *
+     * @param event The join event.
+     */
 	
 	public void onJoinRoomDone(RoomEvent event){
 		log("onJoinRoomDone: "+event.getResult());
@@ -143,6 +176,12 @@ public class WarpController {
 			handleError();
 		}
 	}
+
+    /**
+     * Called when a chat room is subscribed.
+     *
+     * @param roomId The chat room identifier.
+     */
 	
 	public void onRoomSubscribed(String roomId) {
 		log("onSubscribeRoomDone: " + roomId);
@@ -155,6 +194,12 @@ public class WarpController {
 			handleError();
 		}
 	}
+
+    /**
+     * Called when the users of a room are returned.
+     *
+     * @param liveUsers The users on a chat room.
+     */
 	
 	public void onGetLiveRoomInfo(String[] liveUsers){
 		log("onGetLiveRoomInfo: "+liveUsers.length);
@@ -174,6 +219,13 @@ public class WarpController {
 			handleError();
 		}
 	}
+
+    /**
+     * Called when a user joins the chat room the user is on.
+     *
+     * @param roomId The chat room identifier.
+     * @param userName The username of the new user.
+     */
 	
 	public void onUserJoinedRoom(String roomId, String userName){
 		/*
@@ -185,9 +237,21 @@ public class WarpController {
 		}
 	}
 
+    /**
+     * Called when a message is sent to the chat room.
+     *
+     * @param status true on success, false if otherwise.
+     */
+
 	public void onSendChatDone(boolean status){
 		log("onSendChatDone: " + status);
 	}
+
+    /**
+     * Called when a game update is received.
+     *
+     * @param message The game update.
+     */
 	
 	public void onGameUpdateReceived(String message){
         System.out.println("Received Game Update: " + message);
@@ -198,7 +262,14 @@ public class WarpController {
 		if (!_localUser.equals(userName) || data.contains("{\"_gd\":[{"))
 			warpListener.onGameUpdateReceived(data);
 	}
-	
+
+    /**
+     * Called when the status of the game changes.
+     *
+     * @param userName The user that sent the status.
+     * @param code The status code.
+     */
+
 	public void onResultUpdateReceived(String userName, int code){
 		if (_localUser.equals(userName) == false) {
 			STATE = kGameFinished;
@@ -207,34 +278,55 @@ public class WarpController {
 			warpListener.onGameFinished(code, false);
 		}
 	}
-	
-	public void onUserLeftRoom(String roomId, String userName){
-		log("onUserLeftRoom "+userName+" in room "+roomId);
 
-		if (STATE == kGameStarted && !_localUser.equals(userName)) { // Game Started and other user left the room
-			warpListener.onGameFinished(kGameCompleteEnemyLeft, true);
-		}
-	}
+    /**
+     * Called when a user leaves the game.
+     *
+     * @param roomId The id of the room.
+     * @param userName The username of the user.
+     */
 	
-	public int getState(){
-		return this.STATE;
-	}
-	
+	public void onUserLeftRoom(String roomId, String userName) {
+        log("onUserLeftRoom " + userName + " in room " + roomId);
+
+        if (STATE == kGameStarted && !_localUser.equals(userName)) { // Game Started and other user left the room
+            warpListener.onGameFinished(kGameCompleteEnemyLeft, true);
+        }
+    }
+
+    /**
+     * Logs a message to the console.
+     *
+     * @param message The message to log.
+     */
+
 	private void log(String message){
-		if(showLog) {
+		if (showLog) {
 			System.out.println(message);
 		}
 	}
+
+    /**
+     * Alert the listener to start a multiplayer game.
+     */
 	
 	private void startGame() {
 		STATE = kGameStarted;
 		warpListener.onGameStarted("Start the Game");
 	}
+
+    /**
+     * Alert the listener that we are currently waiting for another user to join our game session.
+     */
 	
-	private void waitForOtherUser(){
+	private void waitForOtherUser() {
 		STATE = kWaitingForPlayers;
 		warpListener.onWaitingStarted("Waiting for other user");
 	}
+
+    /**
+     * Handle a server error.
+     */
 	
 	private void handleError(){
 		if (_roomId != null && _roomId.length() > 0) {
@@ -243,19 +335,10 @@ public class WarpController {
 
 		disconnect();
 	}
-	
-	public void handleLeave(){
-		if (_connected) {
-			warpClient.unsubscribeRoom(_roomId);
-			warpClient.leaveRoom(_roomId);
 
-			if (STATE != kGameStarted){
-				warpClient.deleteRoom(_roomId);
-			}
-
-			warpClient.disconnect();
-		}
-	}
+    /**
+     * Disconnect from the server.
+     */
 	
 	private void disconnect(){
 		warpClient.removeConnectionRequestListener(new ConnectionListener(this));

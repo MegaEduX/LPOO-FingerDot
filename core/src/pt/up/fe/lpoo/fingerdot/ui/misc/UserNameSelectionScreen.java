@@ -39,6 +39,13 @@ public class UserNameSelectionScreen implements Screen {
     private String _headerMessage = "Choose an Username:";
     private String _bottomMessage = "Existing Users: Login as Username#PIN, Example: MyCoolUsername#1234";
 
+    /**
+     * Initializer for a new user name selection screen.
+     *
+     * @param callerScreen The caller screen.
+     * @param nextScreen The destination screen.
+     */
+
     public UserNameSelectionScreen(Screen callerScreen, Screen nextScreen) {
         Gdx.input.setCatchBackKey(true);
 
@@ -52,6 +59,10 @@ public class UserNameSelectionScreen implements Screen {
         _callerScreen = callerScreen;
         _nextScreen = nextScreen;
     }
+
+    /**
+     * Draws the stage internally.
+     */
 
     private void drawStage() {
         _needsRedraw = false;
@@ -149,6 +160,12 @@ public class UserNameSelectionScreen implements Screen {
         _stage.addActor(backTable);
     }
 
+    /**
+     * Sets if the text field is being edited, or not.
+     *
+     * @param editing true if the text field is being edited, false if not.
+     */
+
     private void setEditing(boolean editing) {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop)
             return;
@@ -165,6 +182,12 @@ public class UserNameSelectionScreen implements Screen {
             _table.setY(0);
         }
     }
+
+    /**
+     * Renders the screen.
+     *
+     * @param delta Delta time since the last call.
+     */
 
     @Override public void render(float delta) {
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -184,25 +207,54 @@ public class UserNameSelectionScreen implements Screen {
         }
     }
 
-    @Override public void show() {
+    /**
+     * Called when the screen is shown.
+     */
 
+    @Override public void show() {
+        Gdx.input.setInputProcessor(_stage);
     }
+
+    /**
+     * Called when the screen is hidden.
+     */
 
     @Override public void hide() {
 
     }
 
+    /**
+     * Called when the game is resumed.
+     */
+
     @Override public void resume() {
 
     }
+
+    /**
+     * Called when the game is paused.
+     */
 
     @Override public void pause() {
 
     }
 
+    /**
+     * Called when the window is resized.
+     *
+     * @param x New x's size.
+     * @param y New y's size.
+     */
+
     @Override public void resize(int x, int y) {
         _stage.getViewport().update(x, y, false);
     }
+
+    /**
+     * Releases the objects.
+     *
+     * Don't call this directly.
+     */
 
     @Override public void dispose() {
         _stage.dispose();
