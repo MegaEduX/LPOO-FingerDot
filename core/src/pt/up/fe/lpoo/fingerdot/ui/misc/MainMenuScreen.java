@@ -100,10 +100,14 @@ public class MainMenuScreen implements Screen {
                 if (!UserManager.sharedManager().internetIsReachable())
                     return;
 
-                if (UserManager.sharedManager().getUser() == null)
-                    FingerDot.getSharedInstance().setScreen(new UserNameSelectionScreen(new MainMenuScreen(), new MultiPlayerMatchmakingScreen()));
-                else
+                if (UserManager.sharedManager().getUser() == null) {
+                    System.out.println("Login Screen incoming!");
+                    MainMenuScreen screen = new MainMenuScreen();
+                    _game.setScreen(new UserNameSelectionScreen(screen, screen));
+                } else {
+                    System.out.println("User is " + UserManager.sharedManager().getUser().getUsername() + ".");
                     _game.setScreen(new MultiPlayerMatchmakingScreen());
+                }
 
                 dispose();
             };
